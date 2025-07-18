@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <title>🎙️ أكاديمية الصوت والإلقاء</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(to left, #4facfe, #00f2fe);
+            color: #333;
+            text-align: center;
+            padding: 30px;
+        }
+        .box {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin: auto;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            max-width: 600px;
+        }
+        input, select, button {
+            padding: 10px;
+            margin: 10px 0;
+            width: 90%;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+        button {
+            background: linear-gradient(to right, #667eea, #764ba2);
+            color: white;
+            cursor: pointer;
+            border: none;
+        }
+        .circle {
+            width: 120px;
+            height: 120px;
+            margin: 20px auto;
+            border-radius: 50%;
+            background: #667eea;
+            animation: none;
+        }
+        @keyframes breathe {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.5); }
+        }
+        .word-box {
+            font-size: 1.5em;
+            margin: 15px;
+            padding: 10px;
+            background: #f0f0f0;
+            border-radius: 10px;
+        }
+        .scenario, .evaluation {
+            background: #f9f9f9;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 8px;
+        }
+        #mainContent > .box:not(:first-child) {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="box" id="loginBox">
+        <h2>🎙️ مرحبًا بك في أكاديمية الصوت والإلقاء</h2>
+        <input type="text" id="userName" placeholder="أدخل اسمك الكامل" />
+        <select id="userLevel">
+            <option value="beginner">مبتدئ</option>
+            <option value="intermediate">متوسط</option>
+            <option value="advanced">متقدم</option>
+        </select>
+        <button onclick="startTraining()">ابدأ التدريب</button>
+    </div>
+
+    <div id="mainContent">
+        <div class="box" id="menuBox">
+            <h3>مرحبًا <span id="userDisplayName"></span> 👋</h3>
+            <p>اختر أحد التمارين التالية:</p>
+            <button onclick="showSection('breathingBox')">🧘 تمرين التنفس</button>
+            <button onclick="showSection('pronunciationBox')">🔤 تمرين النطق</button>
+            <button onclick="showSection('scenarioBox')">🎬 تمرين السيناريو</button>
+            <button onclick="showSection('evaluationBox')">📊 تقييم الأداء</button>
+        </div>
+
+        <div class="box" id="breathingBox">
+            <h3>🧘 تمرين التنفس</h3>
+            <div class="circle" id="circleBox"></div>
+            <p id="breatheText">اضغط "ابدأ" للتنفس</p>
+            <button onclick="breathe()">ابدأ</button><br>
+            <button onclick="backToMenu()">⬅️ عودة</button>
+        </div>
+
+        <div class="box" id="pronunciationBox">
+            <h3>🔤 تمرين النطق</h3>
+            <div class="word-box" id="currentWord">اضغط "التالي"</div>
+            <button onclick="nextWord()">التالي</button><br>
+            <button onclick="backToMenu()">⬅️ عودة</button>
+        </div>
+
+        <div class="box" id="scenarioBox">
+            <h3>🎬 تمرين السيناريو</h3>
+            <div class="scenario">
+                <strong>تقديم إذاعي:</strong>
+                <p>مرحبًا بكم مستمعينا الكرام، معكم [اسمك] في لقاء جديد.</p>
+            </div>
+            <div class="scenario">
+                <strong>نشرة أخبار:</strong>
+                <p>هنا إذاعة الأخبار، معكم [اسمك] ونبدأ بالعناوين.</p>
+            </div>
+            <button onclick="backToMenu()">⬅️ عودة</button>
+        </div>
+
+        <div class="box" id="evaluationBox">
+            <h3>📊 تقييم الأداء</h3>
+            <div class="evaluation" id="evalResults">اضغط على الزر لرؤية التقييم</div>
+            <button onclick="evaluate()">ابدأ التقييم</button><br>
+            <button onclick="backToMenu()">⬅️ عودة</button>
+        </div>
+    </div>
+
+    <audio id="audioClick" src="audio/click.mp3"></audio>
+    <audio id="audioSuccess" src="audio/success.mp3"></audio>
+
+    <script src="script.js"></script>
+</body>
+</html>
