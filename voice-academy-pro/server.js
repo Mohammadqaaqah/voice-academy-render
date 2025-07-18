@@ -44,19 +44,21 @@ console.log(`
 // إعدادات الأمان والحماية
 // ========================================
 
-// Helmet للحماية الأساسية
+// Helmet للحماية الأساسية مع إصلاح CSP
 app.use(helmet({
     contentSecurityPolicy: {
         directives: {
             defaultSrc: ["'self'"],
             styleSrc: ["'self'", "'unsafe-inline'", "https://cdnjs.cloudflare.com", "https://fonts.googleapis.com"],
-            scriptSrc: ["'self'", "'unsafe-inline'", "https://cdnjs.cloudflare.com"],
+            scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://cdnjs.cloudflare.com"],
             fontSrc: ["'self'", "https://fonts.gstatic.com", "https://cdnjs.cloudflare.com"],
             imgSrc: ["'self'", "data:", "https:", "blob:"],
             mediaSrc: ["'self'", "blob:", "data:"],
             connectSrc: ["'self'", "https:", "blob:"],
             workerSrc: ["'self'", "blob:"],
-            childSrc: ["'self'", "blob:"]
+            childSrc: ["'self'", "blob:"],
+            objectSrc: ["'none'"],
+            frameSrc: ["'none'"]
         }
     },
     crossOriginEmbedderPolicy: false // مطلوب للصوت
@@ -66,6 +68,7 @@ app.use(helmet({
 app.use(cors({
     origin: [
         'http://localhost:3000',
+        'https://voice-academy-render.onrender.com',
         'https://voice-academy-pro.onrender.com',
         'https://mohammadqaaqah.github.io'
     ],
@@ -109,6 +112,21 @@ app.use(express.urlencoded({
     limit: '10mb' 
 }));
 
+// إعداد Service Worker مع MIME type صحيح
+app.use('/sw.js', express.static('sw.js', {
+    setHeaders: (res) => {
+        res.setHeader('Content-Type', 'application/javascript');
+        res.setHeader('Service-Worker-Allowed', '/');
+    }
+}));
+
+// إعداد manifest.json مع MIME type صحيح
+app.use('/manifest.json', express.static('manifest.json', {
+    setHeaders: (res) => {
+        res.setHeader('Content-Type', 'application/manifest+json');
+    }
+}));
+
 // إعداد الملفات الثابتة
 app.use(express.static('.', {
     maxAge: NODE_ENV === 'production' ? '1d' : '0',
@@ -118,10 +136,17 @@ app.use(express.static('.', {
         // إعدادات خاصة لأنواع الملفات المختلفة
         if (path.endsWith('.html')) {
             res.set('Cache-Control', 'public, max-age=300'); // 5 دقائق للHTML
-        } else if (path.endsWith('.js') || path.endsWith('.css')) {
-            res.set('Cache-Control', 'public, max-age=86400'); // يوم واحد للJS/CSS
+        } else if (path.endsWith('.js')) {
+            res.set('Content-Type', 'application/javascript');
+            res.set('Cache-Control', 'public, max-age=86400'); // يوم واحد للJS
+        } else if (path.endsWith('.css')) {
+            res.set('Content-Type', 'text/css');
+            res.set('Cache-Control', 'public, max-age=86400'); // يوم واحد للCSS
         } else if (path.match(/\.(jpg|jpeg|png|gif|ico|svg)$/)) {
             res.set('Cache-Control', 'public, max-age=604800'); // أسبوع للصور
+        } else if (path.endsWith('.woff2') || path.endsWith('.woff')) {
+            res.set('Content-Type', 'font/woff2');
+            res.set('Cache-Control', 'public, max-age=31536000'); // سنة للخطوط
         }
     }
 }));
