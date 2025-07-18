@@ -1,1 +1,370 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎙️ أكاديمية الإعلام الاحترافية</title>
+    
+    <!-- الخطوط والأيقونات -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- ملف التصميم -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Meta Tags للمشاركة -->
+    <meta property="og:title" content="أكاديمية الإعلام الاحترافية">
+    <meta property="og:description" content="منصة تدريب متقدمة مدعومة بالذكاء الاصطناعي لتطوير المهارات الصوتية والإلقاء">
+    <meta property="og:image" content="https://via.placeholder.com/1200x630/667eea/ffffff?text=🎙️+أكاديمية+الإعلام">
+    <meta property="og:url" content="https://voice-academy-pro.onrender.com">
+    <meta name="twitter:card" content="summary_large_image">
+    
+    <!-- PWA Meta -->
+    <meta name="theme-color" content="#667eea">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icon-192.png">
+</head>
+<body>
+    <!-- شاشة التحميل -->
+    <div id="loadingScreen" class="loading-screen">
+        <div class="loading-content">
+            <div class="ai-logo">
+                <i class="fas fa-brain fa-pulse"></i>
+            </div>
+            <h2>🎙️ أكاديمية الإعلام الاحترافية</h2>
+            <p>مدعوم بالذكاء الاصطناعي</p>
+            <div class="loading-bar">
+                <div class="loading-progress" id="loadingProgress"></div>
+            </div>
+            <p id="loadingText">جاري تحميل النظام...</p>
+        </div>
+    </div>
 
+    <!-- شاشة تسجيل الدخول -->
+    <div id="loginSection" class="section">
+        <div class="container">
+            <div class="login-card">
+                <div class="login-header">
+                    <div class="logo">
+                        <i class="fas fa-microphone-alt"></i>
+                    </div>
+                    <h1>أكاديمية الإعلام الاحترافية</h1>
+                    <p>منصة تدريب متقدمة مدعومة بالذكاء الاصطناعي</p>
+                </div>
+                
+                <div class="login-form">
+                    <div class="input-group">
+                        <label>
+                            <i class="fas fa-user"></i>
+                            الاسم الكامل
+                        </label>
+                        <input type="text" id="userName" placeholder="أدخل اسمك الكامل" maxlength="50">
+                        <small>مثال: أحمد محمد علي</small>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>
+                            <i class="fas fa-level-up-alt"></i>
+                            مستوى الخبرة
+                        </label>
+                        <select id="userLevel">
+                            <option value="beginner">مبتدئ - أول مرة في التدريب الصوتي</option>
+                            <option value="intermediate">متوسط - لدي خبرة أساسية</option>
+                            <option value="advanced">متقدم - خبرة جيدة أبحث عن التطوير</option>
+                            <option value="professional">محترف - أعمل في المجال</option>
+                        </select>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>
+                            <i class="fas fa-bullseye"></i>
+                            هدفك من التدريب
+                        </label>
+                        <select id="trainingGoal">
+                            <option value="general">تحسين عام للمهارات الصوتية</option>
+                            <option value="broadcasting">العمل في الإذاعة والتلفزيون</option>
+                            <option value="podcasting">إنتاج البودكاست</option>
+                            <option value="presentations">تحسين العروض التقديمية</option>
+                            <option value="voice_acting">التمثيل الصوتي</option>
+                            <option value="teaching">التدريس والتعليم</option>
+                        </select>
+                    </div>
+                    
+                    <div class="button-group">
+                        <button class="btn-primary" onclick="startTraining()">
+                            <i class="fas fa-rocket"></i>
+                            بدء الرحلة التدريبية
+                        </button>
+                        
+                        <button class="btn-secondary" onclick="loadExistingProfile()">
+                            <i class="fas fa-upload"></i>
+                            تحميل ملف شخصي موجود
+                        </button>
+                        
+                        <button class="btn-demo" onclick="startDemo()">
+                            <i class="fas fa-play"></i>
+                            عرض توضيحي سريع
+                        </button>
+                    </div>
+                    
+                    <div class="login-footer">
+                        <p><i class="fas fa-shield-alt"></i> بياناتك محفوظة بأمان</p>
+                        <p><i class="fas fa-wifi"></i> يعمل بدون إنترنت</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- الواجهة الرئيسية -->
+    <div id="mainInterface" class="section hidden">
+        <!-- شريط التنقل العلوي -->
+        <nav class="top-nav">
+            <div class="nav-content">
+                <div class="logo-section">
+                    <i class="fas fa-microphone-alt"></i>
+                    <span id="userWelcome">مرحباً</span>
+                </div>
+                
+                <div class="nav-stats">
+                    <div class="stat-item">
+                        <i class="fas fa-star"></i>
+                        <span id="userLevelDisplay">المستوى 1</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-trophy"></i>
+                        <span id="userPointsDisplay">0 نقطة</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-fire"></i>
+                        <span id="userStreakDisplay">0 يوم</span>
+                    </div>
+                </div>
+                
+                <div class="nav-actions">
+                    <button class="nav-btn" onclick="showNotifications()" title="الإشعارات">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">3</span>
+                    </button>
+                    <button class="nav-btn" onclick="showProfile()" title="الملف الشخصي">
+                        <i class="fas fa-user-circle"></i>
+                    </button>
+                    <button class="nav-btn" onclick="logout()" title="تسجيل الخروج">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- التبويبات الرئيسية -->
+        <div class="main-tabs">
+            <button class="tab-btn active" data-tab="dashboard" onclick="switchTab('dashboard', this)">
+                <i class="fas fa-tachometer-alt"></i>
+                <span>لوحة التحكم</span>
+            </button>
+            <button class="tab-btn" data-tab="training" onclick="switchTab('training', this)">
+                <i class="fas fa-dumbbell"></i>
+                <span>التدريب</span>
+            </button>
+            <button class="tab-btn" data-tab="analysis" onclick="switchTab('analysis', this)">
+                <i class="fas fa-chart-line"></i>
+                <span>التحليل الذكي</span>
+            </button>
+            <button class="tab-btn" data-tab="studio" onclick="switchTab('studio', this)">
+                <i class="fas fa-microphone"></i>
+                <span>الاستوديو</span>
+            </button>
+            <button class="tab-btn" data-tab="progress" onclick="switchTab('progress', this)">
+                <i class="fas fa-chart-bar"></i>
+                <span>التقدم</span>
+            </button>
+        </div>
+
+        <!-- محتوى التبويبات -->
+        <div class="tab-content">
+            <!-- لوحة التحكم -->
+            <div id="dashboard" class="tab-panel active">
+                <div class="dashboard-container">
+                    <!-- بطاقة الترحيب مع المساعد الذكي -->
+                    <div class="welcome-card">
+                        <div class="ai-assistant">
+                            <div class="ai-avatar">
+                                <i class="fas fa-robot"></i>
+                            </div>
+                            <div class="ai-message">
+                                <h3>مرحباً! أنا مساعدك الذكي</h3>
+                                <p id="aiWelcomeMessage">جاري تحليل ملفك الشخصي لإنشاء خطة تدريبية مخصصة...</p>
+                                <button class="btn-ai" onclick="getPersonalizedAdvice()">
+                                    <i class="fas fa-lightbulb"></i>
+                                    احصل على نصيحة ذكية
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- الإحصائيات السريعة -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon clock">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="totalMinutes">0</h3>
+                                <p>دقيقة تدريب</p>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon check">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="completedExercises">0</h3>
+                                <p>تمرين مكتمل</p>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon target">
+                                <i class="fas fa-target"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="accuracyScore">0%</h3>
+                                <p>دقة الأداء</p>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon medal">
+                                <i class="fas fa-medal"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="achievementsCount">0</h3>
+                                <p>إنجاز</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- التمارين المقترحة -->
+                    <div class="recommendations-card">
+                        <h3>
+                            <i class="fas fa-magic"></i>
+                            تمارين مقترحة لك اليوم
+                        </h3>
+                        <div class="recommended-exercises" id="recommendedExercises">
+                            <!-- سيتم ملؤها بواسطة JavaScript -->
+                        </div>
+                    </div>
+
+                    <!-- التقدم اليومي -->
+                    <div class="daily-progress-card">
+                        <h3>
+                            <i class="fas fa-calendar-day"></i>
+                            تقدمك اليوم
+                        </h3>
+                        <div class="progress-ring">
+                            <svg class="progress-circle" width="120" height="120">
+                                <circle cx="60" cy="60" r="50" stroke="#e0e0e0" stroke-width="8" fill="none"/>
+                                <circle cx="60" cy="60" r="50" stroke="#4CAF50" stroke-width="8" fill="none" 
+                                        stroke-dasharray="314" stroke-dashoffset="314" id="progressCircle"/>
+                            </svg>
+                            <div class="progress-text">
+                                <span id="dailyProgressPercent">0%</span>
+                                <small>من الهدف اليومي</small>
+                            </div>
+                        </div>
+                        <div class="daily-goals">
+                            <div class="goal-item completed">
+                                <i class="fas fa-check"></i>
+                                <span>تمرين تنفس (مكتمل)</span>
+                            </div>
+                            <div class="goal-item pending">
+                                <i class="fas fa-clock"></i>
+                                <span>تمرين نطق (متبقي)</span>
+                            </div>
+                            <div class="goal-item pending">
+                                <i class="fas fa-clock"></i>
+                                <span>تسجيل صوتي (متبقي)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- باقي التبويبات - سنضيفها لاحقاً -->
+            <div id="training" class="tab-panel">
+                <div class="coming-soon">
+                    <i class="fas fa-dumbbell fa-3x"></i>
+                    <h2>قسم التدريب</h2>
+                    <p>جاري التطوير...</p>
+                </div>
+            </div>
+
+            <div id="analysis" class="tab-panel">
+                <div class="coming-soon">
+                    <i class="fas fa-chart-line fa-3x"></i>
+                    <h2>التحليل الذكي</h2>
+                    <p>جاري التطوير...</p>
+                </div>
+            </div>
+
+            <div id="studio" class="tab-panel">
+                <div class="coming-soon">
+                    <i class="fas fa-microphone fa-3x"></i>
+                    <h2>الاستوديو</h2>
+                    <p>جاري التطوير...</p>
+                </div>
+            </div>
+
+            <div id="progress" class="tab-panel">
+                <div class="coming-soon">
+                    <i class="fas fa-chart-bar fa-3x"></i>
+                    <h2>تقرير التقدم</h2>
+                    <p>جاري التطوير...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- النوافذ المنبثقة -->
+    <div id="modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <!-- شريط الإشعارات -->
+    <div id="notificationBar" class="notification-bar hidden">
+        <div class="notification-content">
+            <i class="notification-icon"></i>
+            <span class="notification-text"></span>
+            <button class="notification-close" onclick="closeNotification()">&times;</button>
+        </div>
+    </div>
+
+    <!-- مشغل الصوت العائم -->
+    <div id="floatingPlayer" class="floating-player hidden">
+        <div class="player-info">
+            <i class="fas fa-play-circle"></i>
+            <span>جاري التشغيل...</span>
+        </div>
+        <div class="player-controls">
+            <button onclick="togglePlayPause()"><i class="fas fa-pause"></i></button>
+            <button onclick="stopAudio()"><i class="fas fa-stop"></i></button>
+        </div>
+    </div>
+
+    <!-- ملفات JavaScript -->
+    <script src="app.js"></script>
+    <script src="ai-analysis.js"></script>
+    <script src="audio-processing.js"></script>
+    
+    <!-- تهيئة التطبيق -->
+    <script>
+        console.log('🎓 أكاديمية الإعلام الاحترافية - جاري التحميل...');
+    </script>
+</body>
+</html>
