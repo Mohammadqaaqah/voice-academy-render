@@ -29,6 +29,45 @@ class VoiceAcademyApp {
         this.trainingSession = null;
         this.notifications = [];
         
+        // تهيئة البيانات الافتراضية لتجنب الأخطاء
+        this.userData = {
+            statistics: {
+                totalRecordings: 0,
+                totalDuration: 0,
+                averageScore: 0,
+                dailyProgress: 0,
+                weeklyProgress: 0,
+                monthlyProgress: 0,
+                completedLessons: 0,
+                totalLessons: 10,
+                streakDays: 0,
+                lastActivity: new Date().toISOString(),
+                exercisesCompleted: 0,
+                recordingsAnalyzed: 0,
+                averageAccuracy: 0,
+                improvementRate: 0,
+                totalSessions: 0,
+                bestScores: {
+                    breathing: 0,
+                    pronunciation: 0,
+                    expression: 0,
+                    confidence: 0
+                }
+            },
+            settings: {
+                language: 'ar',
+                theme: 'dark',
+                notifications: true,
+                autoSave: true
+            },
+            progress: {
+                currentLevel: 1,
+                experience: 0,
+                achievements: [],
+                completedCourses: []
+            }
+        };
+        
         // تهيئة التطبيق
         this.init();
     }
@@ -83,6 +122,11 @@ class VoiceAcademyApp {
         const loadingText = document.getElementById('loadingText');
         const progressBar = document.getElementById('loadingProgress');
         
+        if (!loadingText || !progressBar) {
+            this.warn('⚠️ عناصر شاشة التحميل غير موجودة');
+            return;
+        }
+        
         const updateProgress = () => {
             if (currentIndex < loadingTexts.length) {
                 loadingText.textContent = loadingTexts[currentIndex];
@@ -103,12 +147,18 @@ class VoiceAcademyApp {
     hideLoadingScreen() {
         setTimeout(() => {
             const loadingScreen = document.getElementById('loadingScreen');
-            loadingScreen.classList.add('hidden');
+            const loginSection = document.getElementById('loginSection');
             
-            setTimeout(() => {
-                loadingScreen.style.display = 'none';
-                document.getElementById('loginSection').classList.add('active');
-            }, 500);
+            if (loadingScreen) {
+                loadingScreen.classList.add('hidden');
+                
+                setTimeout(() => {
+                    loadingScreen.style.display = 'none';
+                    if (loginSection) {
+                        loginSection.classList.add('active');
+                    }
+                }, 500);
+            }
         }, 3000);
     }
 
@@ -151,27 +201,31 @@ class VoiceAcademyApp {
      * التعامل مع أحداث لوحة المفاتيح
      */
     handleKeydown(e) {
-        // إغلاق النوافذ بـ Escape
-        if (e.key === 'Escape') {
-            this.closeModal();
-            this.closeNotification();
-        }
-        
-        // حفظ سريع بـ Ctrl+S
-        if (e.ctrlKey && e.key === 's') {
-            e.preventDefault();
-            this.saveUserData();
-            this.showNotification('تم حفظ البيانات', 'success');
-        }
-        
-        // التنقل السريع بين التبويبات
-        if (e.ctrlKey && e.key >= '1' && e.key <= '5') {
-            e.preventDefault();
-            const tabNames = ['dashboard', 'training', 'analysis', 'studio', 'progress'];
-            const tabIndex = parseInt(e.key) - 1;
-            if (tabNames[tabIndex]) {
-                this.switchTab(tabNames[tabIndex]);
+        try {
+            // إغلاق النوافذ بـ Escape
+            if (e.key === 'Escape') {
+                this.closeModal();
+                this.closeNotification();
             }
+            
+            // حفظ سريع بـ Ctrl+S
+            if (e.ctrlKey && e.key === 's') {
+                e.preventDefault();
+                this.saveUserData();
+                this.showNotification('تم حفظ البيانات', 'success');
+            }
+            
+            // التنقل السريع بين التبويبات
+            if (e.ctrlKey && e.key >= '1' && e.key <= '5') {
+                e.preventDefault();
+                const tabNames = ['dashboard', 'training', 'analysis', 'studio', 'progress'];
+                const tabIndex = parseInt(e.key) - 1;
+                if (tabNames[tabIndex]) {
+                    this.switchTab(tabNames[tabIndex]);
+                }
+            }
+        } catch (error) {
+            this.error('❌ خطأ في معالج لوحة المفاتيح:', error);
         }
     }
 
@@ -179,9 +233,13 @@ class VoiceAcademyApp {
      * التعامل مع النقرات العامة
      */
     handleGlobalClick(e) {
-        // إغلاق النافذة المنبثقة عند النقر على الخلفية
-        if (e.target.classList.contains('modal')) {
-            this.closeModal();
+        try {
+            // إغلاق النافذة المنبثقة عند النقر على الخلفية
+            if (e.target.classList.contains('modal')) {
+                this.closeModal();
+            }
+        } catch (error) {
+            this.error('❌ خطأ في معالج النقرات:', error);
         }
     }
 
@@ -189,8 +247,12 @@ class VoiceAcademyApp {
      * التعامل مع تغيير حجم النافذة
      */
     handleResize() {
-        // إعادة حساب تخطيط العناصر
-        this.updateLayout();
+        try {
+            // إعادة حساب تخطيط العناصر
+            this.updateLayout();
+        } catch (error) {
+            this.error('❌ خطأ في معالج تغيير الحجم:', error);
+        }
     }
 
     /**
@@ -222,33 +284,49 @@ class VoiceAcademyApp {
      * بدء التدريب - تسجيل دخول جديد
      */
     async startTraining() {
-        const userName = document.getElementById('userName').value.trim();
-        const userLevel = document.getElementById('userLevel').value;
-        const trainingGoal = document.getElementById('trainingGoal').value;
+        try {
+            const userName = document.getElementById('userName');
+            const userLevel = document.getElementById('userLevel');
+            const trainingGoal = document.getElementById('trainingGoal');
+            
+            if (!userName || !userLevel || !trainingGoal) {
+                this.showNotification('عناصر النموذج غير موجودة', 'error');
+                return false;
+            }
+            
+            const name = userName.value.trim();
+            const level = userLevel.value;
+            const goal = trainingGoal.value;
 
-        // التحقق من صحة البيانات
-        if (!this.validateUserInput(userName)) {
+            // التحقق من صحة البيانات
+            if (!this.validateUserInput(name)) {
+                return false;
+            }
+
+            // إنشاء ملف المستخدم الجديد
+            this.currentUser = this.createNewUser(name, level, goal);
+            this.userData = this.currentUser; // ربط البيانات
+            
+            // حفظ البيانات
+            await this.saveUserData();
+            
+            // عرض الواجهة الرئيسية
+            this.showMainInterface();
+            
+            // تحديث البيانات
+            this.updateAllUI();
+            
+            // رسالة ترحيب
+            this.showWelcomeMessage();
+            
+            this.log('👤 تم إنشاء مستخدم جديد:', name);
+            
+            return true;
+        } catch (error) {
+            this.error('❌ خطأ في بدء التدريب:', error);
+            this.showNotification('حدث خطأ في بدء التدريب', 'error');
             return false;
         }
-
-        // إنشاء ملف المستخدم الجديد
-        this.currentUser = this.createNewUser(userName, userLevel, trainingGoal);
-        
-        // حفظ البيانات
-        await this.saveUserData();
-        
-        // عرض الواجهة الرئيسية
-        this.showMainInterface();
-        
-        // تحديث البيانات
-        this.updateAllUI();
-        
-        // رسالة ترحيب
-        this.showWelcomeMessage();
-        
-        this.log('👤 تم إنشاء مستخدم جديد:', userName);
-        
-        return true;
     }
 
     /**
@@ -312,6 +390,16 @@ class VoiceAcademyApp {
                 averageAccuracy: 0,
                 improvementRate: 0,
                 totalSessions: 0,
+                totalRecordings: 0,
+                totalDuration: 0,
+                averageScore: 0,
+                dailyProgress: 0,
+                weeklyProgress: 0,
+                monthlyProgress: 0,
+                completedLessons: 0,
+                totalLessons: 10,
+                streakDays: 0,
+                lastActivity: new Date().toISOString(),
                 bestScores: {
                     breathing: 0,
                     pronunciation: 0,
@@ -370,6 +458,7 @@ class VoiceAcademyApp {
                     
                     if (this.validateUserData(userData)) {
                         this.currentUser = userData;
+                        this.userData = userData; // ربط البيانات
                         this.showMainInterface();
                         this.updateAllUI();
                         this.showNotification('تم تحميل الملف الشخصي بنجاح', 'success');
@@ -400,6 +489,7 @@ class VoiceAcademyApp {
      */
     startDemo() {
         this.currentUser = this.createDemoUser();
+        this.userData = this.currentUser; // ربط البيانات
         this.showMainInterface();
         this.updateAllUI();
         this.showNotification('مرحباً بك في العرض التوضيحي! 🎬', 'info');
@@ -435,8 +525,15 @@ class VoiceAcademyApp {
      * عرض الواجهة الرئيسية
      */
     showMainInterface() {
-        document.getElementById('loginSection').classList.remove('active');
-        document.getElementById('mainInterface').classList.remove('hidden');
+        const loginSection = document.getElementById('loginSection');
+        const mainInterface = document.getElementById('mainInterface');
+        
+        if (loginSection) {
+            loginSection.classList.remove('active');
+        }
+        if (mainInterface) {
+            mainInterface.classList.remove('hidden');
+        }
         
         this.updateUserDisplay();
     }
@@ -447,19 +544,23 @@ class VoiceAcademyApp {
     updateUserDisplay() {
         if (!this.currentUser) return;
         
-        document.getElementById('userWelcome').textContent = `مرحباً ${this.currentUser.name}`;
-        document.getElementById('userLevelDisplay').textContent = `المستوى ${this.currentUser.profile.currentLevel}`;
-        document.getElementById('userPointsDisplay').textContent = `${this.currentUser.profile.xp} نقطة`;
-        document.getElementById('userStreakDisplay').textContent = `${this.currentUser.profile.streak} يوم`;
+        this.updateElement('#userWelcome', `مرحباً ${this.currentUser.name}`);
+        this.updateElement('#userLevelDisplay', `المستوى ${this.currentUser.profile.currentLevel}`);
+        this.updateElement('#userPointsDisplay', `${this.currentUser.profile.xp} نقطة`);
+        this.updateElement('#userStreakDisplay', `${this.currentUser.profile.streak} يوم`);
     }
 
     /**
      * تحديث جميع عناصر الواجهة
      */
     updateAllUI() {
-        this.updateUserDisplay();
-        this.updateDashboard();
-        this.updateProgressCircle();
+        try {
+            this.updateUserDisplay();
+            this.updateDashboard();
+            this.updateProgressCircle();
+        } catch (error) {
+            this.error('❌ خطأ في تحديث الواجهة:', error);
+        }
     }
 
     /**
@@ -468,25 +569,33 @@ class VoiceAcademyApp {
     updateDashboard() {
         if (!this.currentUser) return;
         
-        // تحديث الإحصائيات
-        document.getElementById('totalMinutes').textContent = this.currentUser.profile.totalMinutes;
-        document.getElementById('completedExercises').textContent = this.currentUser.statistics.exercisesCompleted;
-        document.getElementById('accuracyScore').textContent = `${this.currentUser.statistics.averageAccuracy}%`;
-        document.getElementById('achievementsCount').textContent = this.currentUser.achievements.length;
-        
-        // تحديث رسالة المساعد الذكي
-        this.updateAIMessage();
-        
-        // تحديث التمارين المقترحة
-        this.updateRecommendedExercises();
+        try {
+            // تحديث الإحصائيات
+            this.updateElement('#totalMinutes', this.currentUser.profile.totalMinutes || 0);
+            this.updateElement('#completedExercises', this.currentUser.statistics.exercisesCompleted || 0);
+            this.updateElement('#accuracyScore', `${this.currentUser.statistics.averageAccuracy || 0}%`);
+            this.updateElement('#achievementsCount', this.currentUser.achievements.length || 0);
+            
+            // تحديث رسالة المساعد الذكي
+            this.updateAIMessage();
+            
+            // تحديث التمارين المقترحة
+            this.updateRecommendedExercises();
+        } catch (error) {
+            this.error('❌ خطأ في تحديث لوحة التحكم:', error);
+        }
     }
 
     /**
      * تحديث رسالة المساعد الذكي
      */
     updateAIMessage() {
-        const messages = this.generateAIMessages();
-        document.getElementById('aiWelcomeMessage').textContent = messages.welcome;
+        try {
+            const messages = this.generateAIMessages();
+            this.updateElement('#aiWelcomeMessage', messages.welcome);
+        } catch (error) {
+            this.error('❌ خطأ في تحديث رسالة الذكاء الاصطناعي:', error);
+        }
     }
 
     /**
@@ -543,22 +652,31 @@ class VoiceAcademyApp {
      * تحديث التمارين المقترحة
      */
     updateRecommendedExercises() {
-        const recommendations = this.generateRecommendations();
-        const container = document.getElementById('recommendedExercises');
-        
-        container.innerHTML = recommendations.map(rec => `
-            <div class="recommendation-item interactive-card" onclick="voiceAcademy.startRecommendedExercise('${rec.type}')">
-                <div class="rec-icon">
-                    <i class="fas ${rec.icon}"></i>
+        try {
+            const recommendations = this.generateRecommendations();
+            const container = document.getElementById('recommendedExercises');
+            
+            if (!container) {
+                this.warn('⚠️ عنصر التمارين المقترحة غير موجود');
+                return;
+            }
+            
+            container.innerHTML = recommendations.map(rec => `
+                <div class="recommendation-item interactive-card" onclick="voiceAcademy.startRecommendedExercise('${rec.type}')">
+                    <div class="rec-icon">
+                        <i class="fas ${rec.icon}"></i>
+                    </div>
+                    <div class="rec-content">
+                        <h4>${rec.title}</h4>
+                        <p>${rec.description}</p>
+                        <div class="rec-difficulty ${rec.difficulty}">${rec.difficultyText}</div>
+                    </div>
+                    <div class="rec-time">${rec.estimatedTime} دقيقة</div>
                 </div>
-                <div class="rec-content">
-                    <h4>${rec.title}</h4>
-                    <p>${rec.description}</p>
-                    <div class="rec-difficulty ${rec.difficulty}">${rec.difficultyText}</div>
-                </div>
-                <div class="rec-time">${rec.estimatedTime} دقيقة</div>
-            </div>
-        `).join('');
+            `).join('');
+        } catch (error) {
+            this.error('❌ خطأ في تحديث التمارين المقترحة:', error);
+        }
     }
 
     /**
@@ -625,16 +743,25 @@ class VoiceAcademyApp {
      * تحديث دائرة التقدم اليومي
      */
     updateProgressCircle() {
-        const progress = this.calculateDailyProgress();
-        const circle = document.getElementById('progressCircle');
-        const text = document.getElementById('dailyProgressPercent');
-        
-        if (circle && text) {
-            const circumference = 2 * Math.PI * 50; // نصف القطر 50
-            const offset = circumference - (progress / 100) * circumference;
+        try {
+            const progress = this.calculateDailyProgress();
+            const circle = document.querySelector('.progress-circle');
+            const text = document.querySelector('.progress-text');
             
-            circle.style.strokeDashoffset = offset;
-            text.textContent = `${progress}%`;
+            if (!circle || !text) {
+                this.warn('⚠️ عناصر دائرة التقدم غير موجودة');
+                return;
+            }
+            
+            const circumference = 2 * Math.PI * 45; // نصف قطر الدائرة 45
+            const strokeDashoffset = circumference - (progress / 100) * circumference;
+            
+            circle.style.strokeDasharray = circumference;
+            circle.style.strokeDashoffset = strokeDashoffset;
+            text.textContent = `${Math.round(progress)}%`;
+            
+        } catch (error) {
+            this.error('❌ خطأ في تحديث دائرة التقدم:', error);
         }
     }
 
@@ -642,81 +769,90 @@ class VoiceAcademyApp {
      * حساب التقدم اليومي
      */
     calculateDailyProgress() {
-        // هدف يومي افتراضي
-        const dailyGoals = {
-            exercises: 3,
-            minutes: 30,
-            recordings: 2
-        };
-        
-        // إحصائيات اليوم (محاكاة)
-        const todayStats = {
-            exercises: Math.min(this.currentUser.statistics.exercisesCompleted, dailyGoals.exercises),
-            minutes: Math.min(this.currentUser.profile.totalMinutes, dailyGoals.minutes),
-            recordings: Math.min(this.currentUser.statistics.recordingsAnalyzed, dailyGoals.recordings)
-        };
-        
-        const progressScores = [
-            (todayStats.exercises / dailyGoals.exercises) * 100,
-            (todayStats.minutes / dailyGoals.minutes) * 100,
-            (todayStats.recordings / dailyGoals.recordings) * 100
-        ];
-        
-        return Math.min(Math.round(progressScores.reduce((a, b) => a + b, 0) / 3), 100);
+        try {
+            if (!this.userData || !this.userData.statistics) {
+                this.warn('⚠️ بيانات المستخدم غير متوفرة');
+                return 0;
+            }
+            
+            const stats = this.userData.statistics;
+            const today = new Date().toDateString();
+            const lastActivity = new Date(stats.lastActivity).toDateString();
+            
+            // إذا كان اليوم جديد، اعتبر التقدم 0
+            if (today !== lastActivity) {
+                stats.dailyProgress = 0;
+                stats.lastActivity = new Date().toISOString();
+                this.saveUserData();
+            }
+            
+            return stats.dailyProgress || 0;
+        } catch (error) {
+            this.error('❌ خطأ في حساب التقدم اليومي:', error);
+            return 0;
+        }
     }
 
     /**
      * التبديل بين التبويبات
      */
     switchTab(tabName, element = null) {
-        // إخفاء جميع التبويبات
-        document.querySelectorAll('.tab-panel').forEach(panel => {
-            panel.classList.remove('active');
-        });
-        
-        // إزالة التحديد من جميع أزرار التبويبات
-        document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.classList.remove('active');
-        });
-        
-        // إظهار التبويب المحدد
-        const targetPanel = document.getElementById(tabName);
-        if (targetPanel) {
-            targetPanel.classList.add('active');
+        try {
+            // إخفاء جميع التبويبات
+            document.querySelectorAll('.tab-panel').forEach(panel => {
+                panel.classList.remove('active');
+            });
+            
+            // إزالة التحديد من جميع أزرار التبويبات
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // إظهار التبويب المحدد
+            const targetPanel = document.getElementById(tabName);
+            if (targetPanel) {
+                targetPanel.classList.add('active');
+            }
+            
+            // تحديد زر التبويب
+            const targetBtn = element || document.querySelector(`[data-tab="${tabName}"]`);
+            if (targetBtn) {
+                targetBtn.classList.add('active');
+            }
+            
+            this.currentTab = tabName;
+            this.loadTabContent(tabName);
+            
+            this.log(`📑 تم التبديل إلى تبويب: ${tabName}`);
+        } catch (error) {
+            this.error('❌ خطأ في التبديل بين التبويبات:', error);
         }
-        
-        // تحديد زر التبويب
-        const targetBtn = element || document.querySelector(`[data-tab="${tabName}"]`);
-        if (targetBtn) {
-            targetBtn.classList.add('active');
-        }
-        
-        this.currentTab = tabName;
-        this.loadTabContent(tabName);
-        
-        this.log(`📑 تم التبديل إلى تبويب: ${tabName}`);
     }
 
     /**
      * تحميل محتوى التبويب
      */
     async loadTabContent(tabName) {
-        switch(tabName) {
-            case 'dashboard':
-                this.updateDashboard();
-                break;
-            case 'training':
-                this.loadTrainingContent();
-                break;
-            case 'analysis':
-                this.loadAnalysisContent();
-                break;
-            case 'studio':
-                this.loadStudioContent();
-                break;
-            case 'progress':
-                this.loadProgressContent();
-                break;
+        try {
+            switch(tabName) {
+                case 'dashboard':
+                    this.updateDashboard();
+                    break;
+                case 'training':
+                    this.loadTrainingContent();
+                    break;
+                case 'analysis':
+                    this.loadAnalysisContent();
+                    break;
+                case 'studio':
+                    this.loadStudioContent();
+                    break;
+                case 'progress':
+                    this.loadProgressContent();
+                    break;
+            }
+        } catch (error) {
+            this.error('❌ خطأ في تحميل محتوى التبويب:', error);
         }
     }
 
@@ -756,22 +892,33 @@ class VoiceAcademyApp {
      * بدء تمرين مقترح
      */
     startRecommendedExercise(type) {
-        this.showNotification(`بدء تمرين: ${type}`, 'info');
-        
-        // تحديث الإحصائيات
-        this.currentUser.statistics.exercisesCompleted++;
-        this.currentUser.profile.xp += 10;
-        this.updateAllUI();
-        
-        this.log(`🎯 بدء تمرين مقترح: ${type}`);
+        try {
+            this.showNotification(`بدء تمرين: ${type}`, 'info');
+            
+            // تحديث الإحصائيات
+            if (this.currentUser) {
+                this.currentUser.statistics.exercisesCompleted++;
+                this.currentUser.profile.xp += 10;
+                this.updateAllUI();
+            }
+            
+            this.log(`🎯 بدء تمرين مقترح: ${type}`);
+        } catch (error) {
+            this.error('❌ خطأ في بدء التمرين:', error);
+        }
     }
 
     /**
      * الحصول على نصيحة مخصصة
      */
     getPersonalizedAdvice() {
-        const advice = this.generatePersonalizedAdvice();
-        this.showModal(this.createAdviceModal(advice));
+        try {
+            const advice = this.generatePersonalizedAdvice();
+            this.showModal(this.createAdviceModal(advice));
+        } catch (error) {
+            this.error('❌ خطأ في توليد النصيحة:', error);
+            this.showNotification('حدث خطأ في توليد النصيحة', 'error');
+        }
     }
 
     /**
@@ -860,39 +1007,43 @@ class VoiceAcademyApp {
      * عرض الإشعارات
      */
     showNotifications() {
-        const notifications = [
-            { type: 'success', message: 'تم إكمال تمرين التنفس!', time: 'منذ 10 دقائق', icon: 'fa-check-circle' },
-            { type: 'info', message: 'تذكير: موعد التدريب اليومي', time: 'منذ ساعة', icon: 'fa-clock' },
-            { type: 'achievement', message: 'إنجاز جديد: أسبوع كامل من التدريب', time: 'منذ يوم', icon: 'fa-trophy' }
-        ];
-        
-        const content = `
-            <div class="notifications-modal" style="padding: 2rem; max-width: 600px;">
-                <h3 style="text-align: center; margin-bottom: 2rem; color: var(--primary-color);">
-                    <i class="fas fa-bell"></i> الإشعارات
-                </h3>
-                <div class="notifications-list">
-                    ${notifications.map(notif => `
-                        <div class="notification-item ${notif.type}" style="display: flex; align-items: center; gap: 1rem; padding: 1rem; margin-bottom: 1rem; border-radius: 8px; background: rgba(102, 126, 234, 0.05);">
-                            <div class="notif-icon" style="width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: var(--primary-color); color: white;">
-                                <i class="fas ${notif.icon}"></i>
+        try {
+            const notifications = [
+                { type: 'success', message: 'تم إكمال تمرين التنفس!', time: 'منذ 10 دقائق', icon: 'fa-check-circle' },
+                { type: 'info', message: 'تذكير: موعد التدريب اليومي', time: 'منذ ساعة', icon: 'fa-clock' },
+                { type: 'achievement', message: 'إنجاز جديد: أسبوع كامل من التدريب', time: 'منذ يوم', icon: 'fa-trophy' }
+            ];
+            
+            const content = `
+                <div class="notifications-modal" style="padding: 2rem; max-width: 600px;">
+                    <h3 style="text-align: center; margin-bottom: 2rem; color: var(--primary-color);">
+                        <i class="fas fa-bell"></i> الإشعارات
+                    </h3>
+                    <div class="notifications-list">
+                        ${notifications.map(notif => `
+                            <div class="notification-item ${notif.type}" style="display: flex; align-items: center; gap: 1rem; padding: 1rem; margin-bottom: 1rem; border-radius: 8px; background: rgba(102, 126, 234, 0.05);">
+                                <div class="notif-icon" style="width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: var(--primary-color); color: white;">
+                                    <i class="fas ${notif.icon}"></i>
+                                </div>
+                                <div class="notif-content" style="flex: 1;">
+                                    <p style="margin: 0; font-weight: 600;">${notif.message}</p>
+                                    <span class="notif-time" style="font-size: 0.8rem; color: #666;">${notif.time}</span>
+                                </div>
                             </div>
-                            <div class="notif-content" style="flex: 1;">
-                                <p style="margin: 0; font-weight: 600;">${notif.message}</p>
-                                <span class="notif-time" style="font-size: 0.8rem; color: #666;">${notif.time}</span>
-                            </div>
-                        </div>
-                    `).join('')}
+                        `).join('')}
+                    </div>
+                    <div style="text-align: center; margin-top: 2rem;">
+                        <button class="btn-secondary" onclick="voiceAcademy.closeModal()" style="width: auto; padding: 0.75rem 2rem;">
+                            <i class="fas fa-times"></i> إغلاق
+                        </button>
+                    </div>
                 </div>
-                <div style="text-align: center; margin-top: 2rem;">
-                    <button class="btn-secondary" onclick="voiceAcademy.closeModal()" style="width: auto; padding: 0.75rem 2rem;">
-                        <i class="fas fa-times"></i> إغلاق
-                    </button>
-                </div>
-            </div>
-        `;
-        
-        this.showModal(content);
+            `;
+            
+            this.showModal(content);
+        } catch (error) {
+            this.error('❌ خطأ في عرض الإشعارات:', error);
+        }
     }
 
     /**
@@ -901,45 +1052,49 @@ class VoiceAcademyApp {
     showProfile() {
         if (!this.currentUser) return;
         
-        const content = `
-            <div class="profile-modal" style="padding: 2rem; max-width: 500px;">
-                <h3 style="text-align: center; margin-bottom: 2rem; color: var(--primary-color);">
-                    <i class="fas fa-user-circle"></i> الملف الشخصي
-                </h3>
-                <div class="profile-info">
-                    <div class="profile-field" style="display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid #eee;">
-                        <label style="font-weight: 600;">الاسم:</label>
-                        <span>${this.currentUser.name}</span>
+        try {
+            const content = `
+                <div class="profile-modal" style="padding: 2rem; max-width: 500px;">
+                    <h3 style="text-align: center; margin-bottom: 2rem; color: var(--primary-color);">
+                        <i class="fas fa-user-circle"></i> الملف الشخصي
+                    </h3>
+                    <div class="profile-info">
+                        <div class="profile-field" style="display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid #eee;">
+                            <label style="font-weight: 600;">الاسم:</label>
+                            <span>${this.currentUser.name}</span>
+                        </div>
+                        <div class="profile-field" style="display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid #eee;">
+                            <label style="font-weight: 600;">المستوى:</label>
+                            <span>${this.currentUser.level}</span>
+                        </div>
+                        <div class="profile-field" style="display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid #eee;">
+                            <label style="font-weight: 600;">الهدف:</label>
+                            <span>${this.currentUser.goal}</span>
+                        </div>
+                        <div class="profile-field" style="display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid #eee;">
+                            <label style="font-weight: 600;">تاريخ الانضمام:</label>
+                            <span>${new Date(this.currentUser.joinDate).toLocaleDateString('ar-SA')}</span>
+                        </div>
+                        <div class="profile-field" style="display: flex; justify-content: space-between; padding: 0.75rem 0;">
+                            <label style="font-weight: 600;">إجمالي نقاط الخبرة:</label>
+                            <span style="color: var(--primary-color); font-weight: bold;">${this.currentUser.profile.xp}</span>
+                        </div>
                     </div>
-                    <div class="profile-field" style="display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid #eee;">
-                        <label style="font-weight: 600;">المستوى:</label>
-                        <span>${this.currentUser.level}</span>
-                    </div>
-                    <div class="profile-field" style="display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid #eee;">
-                        <label style="font-weight: 600;">الهدف:</label>
-                        <span>${this.currentUser.goal}</span>
-                    </div>
-                    <div class="profile-field" style="display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid #eee;">
-                        <label style="font-weight: 600;">تاريخ الانضمام:</label>
-                        <span>${new Date(this.currentUser.joinDate).toLocaleDateString('ar-SA')}</span>
-                    </div>
-                    <div class="profile-field" style="display: flex; justify-content: space-between; padding: 0.75rem 0;">
-                        <label style="font-weight: 600;">إجمالي نقاط الخبرة:</label>
-                        <span style="color: var(--primary-color); font-weight: bold;">${this.currentUser.profile.xp}</span>
+                    <div class="profile-actions" style="display: flex; gap: 1rem; margin-top: 2rem;">
+                        <button class="btn-primary" onclick="voiceAcademy.exportProgress()" style="flex: 1;">
+                            <i class="fas fa-download"></i> تصدير البيانات
+                        </button>
+                        <button class="btn-secondary" onclick="voiceAcademy.closeModal()" style="flex: 1;">
+                            <i class="fas fa-times"></i> إغلاق
+                        </button>
                     </div>
                 </div>
-                <div class="profile-actions" style="display: flex; gap: 1rem; margin-top: 2rem;">
-                    <button class="btn-primary" onclick="voiceAcademy.exportProgress()" style="flex: 1;">
-                        <i class="fas fa-download"></i> تصدير البيانات
-                    </button>
-                    <button class="btn-secondary" onclick="voiceAcademy.closeModal()" style="flex: 1;">
-                        <i class="fas fa-times"></i> إغلاق
-                    </button>
-                </div>
-            </div>
-        `;
-        
-        this.showModal(content);
+            `;
+            
+            this.showModal(content);
+        } catch (error) {
+            this.error('❌ خطأ في عرض الملف الشخصي:', error);
+        }
     }
 
     /**
@@ -951,28 +1106,33 @@ class VoiceAcademyApp {
             return;
         }
 
-        const exportData = {
-            user: this.currentUser,
-            exportDate: new Date().toISOString(),
-            version: appSettings.version,
-            type: 'voice_academy_backup'
-        };
-        
-        const dataStr = JSON.stringify(exportData, null, 2);
-        const dataBlob = new Blob([dataStr], { type: 'application/json' });
-        
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(dataBlob);
-        link.download = `voice-academy-${this.currentUser.name}-${new Date().toISOString().split('T')[0]}.json`;
-        
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        
-        URL.revokeObjectURL(link.href);
-        
-        this.showNotification('تم تصدير بياناتك بنجاح 💾', 'success');
-        this.log('📤 تم تصدير بيانات المستخدم');
+        try {
+            const exportData = {
+                user: this.currentUser,
+                exportDate: new Date().toISOString(),
+                version: appSettings.version,
+                type: 'voice_academy_backup'
+            };
+            
+            const dataStr = JSON.stringify(exportData, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(dataBlob);
+            link.download = `voice-academy-${this.currentUser.name}-${new Date().toISOString().split('T')[0]}.json`;
+            
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            URL.revokeObjectURL(link.href);
+            
+            this.showNotification('تم تصدير بياناتك بنجاح 💾', 'success');
+            this.log('📤 تم تصدير بيانات المستخدم');
+        } catch (error) {
+            this.error('❌ خطأ في تصدير البيانات:', error);
+            this.showNotification('حدث خطأ في تصدير البيانات', 'error');
+        }
     }
 
     /**
@@ -980,19 +1140,44 @@ class VoiceAcademyApp {
      */
     logout() {
         if (confirm('هل تريد تسجيل الخروج؟ سيتم حفظ تقدمك تلقائياً.')) {
-            this.saveUserData();
-            this.currentUser = null;
-            
-            document.getElementById('mainInterface').classList.add('hidden');
-            document.getElementById('loginSection').classList.add('active');
-            
-            // إعادة تعيين النماذج
-            document.getElementById('userName').value = '';
-            document.getElementById('userLevel').selectedIndex = 0;
-            document.getElementById('trainingGoal').selectedIndex = 0;
-            
-            this.showNotification('تم تسجيل الخروج وحفظ تقدمك 👋', 'info');
-            this.log('🚪 تم تسجيل خروج المستخدم');
+            try {
+                this.saveUserData();
+                this.currentUser = null;
+                this.userData = {
+                    statistics: {
+                        totalRecordings: 0,
+                        totalDuration: 0,
+                        averageScore: 0,
+                        dailyProgress: 0,
+                        weeklyProgress: 0,
+                        monthlyProgress: 0,
+                        completedLessons: 0,
+                        totalLessons: 10,
+                        streakDays: 0,
+                        lastActivity: new Date().toISOString()
+                    }
+                };
+                
+                const mainInterface = document.getElementById('mainInterface');
+                const loginSection = document.getElementById('loginSection');
+                
+                if (mainInterface) mainInterface.classList.add('hidden');
+                if (loginSection) loginSection.classList.add('active');
+                
+                // إعادة تعيين النماذج
+                const userName = document.getElementById('userName');
+                const userLevel = document.getElementById('userLevel');
+                const trainingGoal = document.getElementById('trainingGoal');
+                
+                if (userName) userName.value = '';
+                if (userLevel) userLevel.selectedIndex = 0;
+                if (trainingGoal) trainingGoal.selectedIndex = 0;
+                
+                this.showNotification('تم تسجيل الخروج وحفظ تقدمك 👋', 'info');
+                this.log('🚪 تم تسجيل خروج المستخدم');
+            } catch (error) {
+                this.error('❌ خطأ في تسجيل الخروج:', error);
+            }
         }
     }
 
@@ -1000,66 +1185,106 @@ class VoiceAcademyApp {
      * عرض النافذة المنبثقة
      */
     showModal(content) {
-        const modal = document.getElementById('modal');
-        const modalBody = document.getElementById('modalBody');
-        
-        modalBody.innerHTML = content;
-        modal.classList.remove('hidden');
-        
-        // التركيز على النافذة لإمكانية الوصول
-        modal.focus();
+        try {
+            const modal = document.getElementById('modal');
+            const modalBody = document.getElementById('modalBody');
+            
+            if (!modal || !modalBody) {
+                this.warn('⚠️ عناصر النافذة المنبثقة غير موجودة');
+                return;
+            }
+            
+            modalBody.innerHTML = content;
+            modal.classList.remove('hidden');
+            
+            // التركيز على النافذة لإمكانية الوصول
+            modal.focus();
+        } catch (error) {
+            this.error('❌ خطأ في عرض النافذة المنبثقة:', error);
+        }
     }
 
     /**
      * إغلاق النافذة المنبثقة
      */
     closeModal() {
-        document.getElementById('modal').classList.add('hidden');
+        try {
+            const modal = document.getElementById('modal');
+            if (modal) {
+                modal.classList.add('hidden');
+            }
+        } catch (error) {
+            this.error('❌ خطأ في إغلاق النافذة المنبثقة:', error);
+        }
     }
 
     /**
      * عرض الإشعار
      */
     showNotification(message, type = 'info', duration = 5000) {
-        const notification = document.getElementById('notificationBar');
-        const content = notification.querySelector('.notification-content');
-        const icon = notification.querySelector('.notification-icon');
-        const text = notification.querySelector('.notification-text');
-        
-        const icons = {
-            success: 'fa-check-circle',
-            error: 'fa-exclamation-circle',
-            warning: 'fa-exclamation-triangle',
-            info: 'fa-info-circle'
-        };
-        
-        icon.className = `notification-icon fas ${icons[type]}`;
-        text.textContent = message;
-        notification.className = `notification-bar ${type}`;
-        
-        // إضافة الإشعار لسجل الإشعارات
-        this.notifications.unshift({
-            message: message,
-            type: type,
-            timestamp: new Date().toISOString()
-        });
-        
-        // الاحتفاظ بآخر 10 إشعارات فقط
-        if (this.notifications.length > 10) {
-            this.notifications = this.notifications.slice(0, 10);
+        try {
+            const notification = document.getElementById('notificationBar');
+            
+            if (!notification) {
+                console.log(`📢 إشعار: ${message}`);
+                return;
+            }
+            
+            const content = notification.querySelector('.notification-content');
+            const icon = notification.querySelector('.notification-icon');
+            const text = notification.querySelector('.notification-text');
+            
+            if (!content || !icon || !text) {
+                console.log(`📢 إشعار: ${message}`);
+                return;
+            }
+            
+            const icons = {
+                success: 'fa-check-circle',
+                error: 'fa-exclamation-circle',
+                warning: 'fa-exclamation-triangle',
+                info: 'fa-info-circle'
+            };
+            
+            icon.className = `notification-icon fas ${icons[type]}`;
+            text.textContent = message;
+            notification.className = `notification-bar ${type}`;
+            notification.classList.remove('hidden');
+            
+            // إضافة الإشعار لسجل الإشعارات
+            this.notifications.unshift({
+                message: message,
+                type: type,
+                timestamp: new Date().toISOString()
+            });
+            
+            // الاحتفاظ بآخر 10 إشعارات فقط
+            if (this.notifications.length > 10) {
+                this.notifications = this.notifications.slice(0, 10);
+            }
+            
+            // إخفاء الإشعار تلقائياً
+            setTimeout(() => {
+                this.closeNotification();
+            }, duration);
+        } catch (error) {
+            this.error('❌ خطأ في عرض الإشعار:', error);
+            console.log(`📢 إشعار: ${message}`);
         }
-        
-        // إخفاء الإشعار تلقائياً
-        setTimeout(() => {
-            this.closeNotification();
-        }, duration);
     }
 
     /**
      * إغلاق الإشعار
      */
     closeNotification() {
-        document.getElementById('notificationBar').classList.add('hidden');
+        try {
+            const notification = document.getElementById('notificationBar');
+            if (notification) {
+                notification.classList.add('hidden');
+            }
+        } catch (error) {
+            this.error('❌ خطأ في إغلاق الإشعار:', error);
+        }
     }
 
     /**
@@ -1109,6 +1334,7 @@ class VoiceAcademyApp {
                 const userData = JSON.parse(savedData);
                 if (this.validateUserData(userData)) {
                     this.currentUser = userData;
+                    this.userData = userData; // ربط البيانات
                     this.log('📂 تم تحميل بيانات محفوظة للمستخدم:', userData.name);
                     return true;
                 }
@@ -1132,8 +1358,31 @@ class VoiceAcademyApp {
      * تحديث التخطيط
      */
     updateLayout() {
-        // إعادة حساب أحجام العناصر عند تغيير حجم النافذة
-        this.updateProgressCircle();
+        try {
+            // تحديث التخطيط بناءً على حجم الشاشة
+            const isMobile = window.innerWidth <= 768;
+            document.body.classList.toggle('mobile-layout', isMobile);
+            
+            // تحديث دائرة التقدم
+            this.updateProgressCircle();
+            
+        } catch (error) {
+            this.error('❌ خطأ في تحديث التخطيط:', error);
+        }
+    }
+
+    /**
+     * تحديث عنصر في الواجهة
+     */
+    updateElement(selector, value) {
+        try {
+            const element = document.querySelector(selector);
+            if (element) {
+                element.textContent = value;
+            }
+        } catch (error) {
+            this.warn(`⚠️ عنصر ${selector} غير موجود`);
+        }
     }
 
     /**
@@ -1237,59 +1486,78 @@ function closeNotification() {
  */
 
 document.addEventListener('DOMContentLoaded', function() {
-    // إنشاء مثيل التطبيق
-    voiceAcademy = new VoiceAcademyApp();
-    
-    // تسجيل التطبيق كـ Service Worker للعمل بدون إنترنت
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/sw.js')
-            .then(registration => {
-                console.log('🔧 تم تسجيل Service Worker بنجاح');
-            })
-            .catch(error => {
-                console.log('❌ فشل في تسجيل Service Worker:', error);
-            });
+    try {
+        // إنشاء مثيل التطبيق
+        voiceAcademy = new VoiceAcademyApp();
+        
+        // تسجيل التطبيق كـ Service Worker للعمل بدون إنترنت
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js')
+                .then(registration => {
+                    console.log('🔧 تم تسجيل Service Worker بنجاح');
+                })
+                .catch(error => {
+                    console.log('❌ فشل في تسجيل Service Worker:', error);
+                });
+        }
+        
+        // إضافة أحداث إضافية
+        setupAdditionalEventListeners();
+        
+        console.log('🎓 أكاديمية الإعلام الاحترافية جاهزة للاستخدام!');
+        console.log('📚 جميع المميزات متاحة');
+        console.log('💾 البيانات محفوظة محلياً مع حفظ تلقائي');
+        console.log('🎯 النظام يدعم: التدريب التفاعلي، الذكاء الاصطناعي، والتحليل المتقدم');
+        console.log('⌨️ استخدم Ctrl+1-5 للتنقل السريع بين التبويبات');
+    } catch (error) {
+        console.error('❌ خطأ في تهيئة التطبيق:', error);
     }
-    
-    // إضافة أحداث إضافية
-    setupAdditionalEventListeners();
-    
-    console.log('🎓 أكاديمية الإعلام الاحترافية جاهزة للاستخدام!');
-    console.log('📚 جميع المميزات متاحة');
-    console.log('💾 البيانات محفوظة محلياً مع حفظ تلقائي');
-    console.log('🎯 النظام يدعم: التدريب التفاعلي، الذكاء الاصطناعي، والتحليل المتقدم');
-    console.log('⌨️ استخدم Ctrl+1-5 للتنقل السريع بين التبويبات');
 });
 
 /**
  * إعداد أحداث إضافية
  */
 function setupAdditionalEventListeners() {
-    // مراقبة تغيير اتجاه الشاشة للأجهزة المحمولة
-    window.addEventListener('orientationchange', function() {
-        setTimeout(() => {
-            if (voiceAcademy) {
-                voiceAcademy.updateLayout();
+    try {
+        // مراقبة تغيير اتجاه الشاشة للأجهزة المحمولة
+        window.addEventListener('orientationchange', function() {
+            setTimeout(() => {
+                if (voiceAcademy) {
+                    voiceAcademy.updateLayout();
+                }
+            }, 500);
+        });
+        
+        // مراقبة حالة الرؤية (عندما يترك المستخدم التبويب)
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                // حفظ البيانات عند إخفاء التبويب
+                if (voiceAcademy && voiceAcademy.currentUser) {
+                    voiceAcademy.saveUserData();
+                }
             }
-        }, 500);
-    });
-    
-    // مراقبة حالة الرؤية (عندما يترك المستخدم التبويب)
-    document.addEventListener('visibilitychange', function() {
-        if (document.hidden) {
-            // حفظ البيانات عند إخفاء التبويب
+        });
+        
+        // حفظ البيانات قبل إغلاق النافذة
+        window.addEventListener('beforeunload', function(e) {
             if (voiceAcademy && voiceAcademy.currentUser) {
                 voiceAcademy.saveUserData();
             }
-        }
-    });
-    
-    // حفظ البيانات قبل إغلاق النافذة
-    window.addEventListener('beforeunload', function(e) {
-        if (voiceAcademy && voiceAcademy.currentUser) {
-            voiceAcademy.saveUserData();
-        }
-    });
+        });
+        
+        // إضافة معالج الأخطاء العام
+        window.addEventListener('error', (event) => {
+            console.error('❌ خطأ عام:', event.error);
+        });
+
+        // إضافة معالج الأخطاء للـ Promise
+        window.addEventListener('unhandledrejection', (event) => {
+            console.error('❌ خطأ في Promise:', event.reason);
+            event.preventDefault();
+        });
+    } catch (error) {
+        console.error('❌ خطأ في إعداد الأحداث الإضافية:', error);
+    }
 }
 
 /**
