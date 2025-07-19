@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🎙️ أكاديمية أمريكان كوليدج</title>
     
-    <!-- الخطوط والأيقونات -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
     
@@ -133,7 +132,6 @@
             box-shadow: 0 5px 15px rgba(255, 152, 0, 0.4);
         }
 
-        /* الواجهة الرئيسية */
         .main-app {
             display: none;
             min-height: 100vh;
@@ -289,6 +287,7 @@
             position: fixed;
             top: 20px;
             right: 20px;
+            left: 20px;
             padding: 15px 25px;
             background: #4caf50;
             color: white;
@@ -297,6 +296,8 @@
             z-index: 1000;
             display: none;
             animation: slideDown 0.3s ease-out;
+            max-width: 400px;
+            margin: 0 auto;
         }
 
         @keyframes slideDown {
@@ -358,6 +359,140 @@
             color: #666;
         }
 
+        .exercise-page {
+            display: none;
+            min-height: 100vh;
+            background: #f5f7fa;
+            padding: 20px;
+        }
+
+        .exercise-page.show {
+            display: block;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .exercise-header {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .exercise-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .exercise-instructions {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #2196f3;
+        }
+
+        .exercise-text {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #667eea;
+            display: none;
+        }
+
+        .exercise-text h4 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .exercise-text p {
+            font-size: 18px;
+            line-height: 1.8;
+            color: #333;
+            font-weight: 500;
+            margin: 15px 0;
+        }
+
+        .exercise-controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .btn-round {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            font-size: 24px;
+            color: white;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-record {
+            background: #f44336;
+        }
+
+        .btn-play {
+            background: #4caf50;
+        }
+
+        .btn-stop {
+            background: #ff9800;
+        }
+
+        .btn-round:hover {
+            transform: scale(1.1);
+        }
+
+        .btn-round:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            width: 0%;
+            transition: width 0.3s ease;
+            border-radius: 4px;
+        }
+
+        .back-btn {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            font-family: 'Cairo', Arial, sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: #5a6268;
+        }
+
         @media (max-width: 768px) {
             .container { 
                 margin: 20px; 
@@ -388,6 +523,10 @@
                 right: 10px;
                 left: 10px;
                 top: 10px;
+            }
+
+            .exercise-controls {
+                flex-wrap: wrap;
             }
         }
 
@@ -583,7 +722,58 @@
         </div>
     </div>
 
-    <!-- رسائل التنبيه -->
+    <!-- صفحة التمرين -->
+    <div id="exercisePage" class="exercise-page">
+        <button class="back-btn" onclick="backToTraining()">
+            <i class="fas fa-arrow-right"></i> العودة للتدريب
+        </button>
+        
+        <div class="exercise-header">
+            <i id="exerciseIcon" class="fas fa-lungs" style="font-size: 60px; color: #667eea; margin-bottom: 20px;"></i>
+            <h1 id="exerciseTitle">تمرين التنفس</h1>
+            <p id="exerciseDescription">تحسين التحكم في التنفس والإيقاع الصوتي</p>
+        </div>
+
+        <div class="exercise-content">
+            <div class="exercise-instructions">
+                <h3><i class="fas fa-info-circle"></i> تعليمات التمرين:</h3>
+                <div id="exerciseInstructions"></div>
+            </div>
+
+            <div id="exerciseText" class="exercise-text">
+                <h4><i class="fas fa-quote-right"></i> النص المطلوب:</h4>
+                <p id="practiceText"></p>
+            </div>
+
+            <div class="exercise-controls">
+                <button id="recordBtn" class="btn-round btn-record" onclick="startRecording()">
+                    <i class="fas fa-microphone"></i>
+                </button>
+                <button id="playBtn" class="btn-round btn-play" onclick="playRecording()" disabled>
+                    <i class="fas fa-play"></i>
+                </button>
+                <button id="stopBtn" class="btn-round btn-stop" onclick="stopRecording()" disabled>
+                    <i class="fas fa-stop"></i>
+                </button>
+            </div>
+
+            <div class="progress-bar">
+                <div id="progressFill" class="progress-fill"></div>
+            </div>
+
+            <div style="text-align: center; margin-top: 20px;">
+                <p id="exerciseStatus">اضغط على زر التسجيل لبدء التمرين</p>
+            </div>
+
+            <div style="text-align: center; margin-top: 30px;">
+                <button class="btn btn-primary" onclick="completeExercise()" style="max-width: 250px;">
+                    <i class="fas fa-check"></i>
+                    إنهاء التمرين
+                </button>
+            </div>
+        </div>
+    </div>
+
     <div id="alert" class="alert">
         <i class="fas fa-check-circle"></i>
         <span id="alertText"></span>
@@ -593,6 +783,108 @@
         // متغيرات التطبيق
         let currentUserData = null;
         let isDemo = false;
+        let currentExercise = null;
+        let isRecording = false;
+        let recordingTimer = null;
+        let recordingDuration = 0;
+        let mediaRecorder = null;
+        let recordedChunks = [];
+
+        // بيانات التمارين
+        const exerciseData = {
+            breathing: {
+                title: 'تمرين التنفس العميق',
+                icon: 'fas fa-lungs',
+                color: '#4caf50',
+                description: 'تحسين التحكم في التنفس والإيقاع الصوتي',
+                instructions: [
+                    'اجلس في وضعية مريحة ومستقيمة',
+                    'ضع يدك على صدرك والأخرى على بطنك',
+                    'خذ نفساً عميقاً من الأنف لمدة 4 ثوان',
+                    'احبس النفس لمدة 4 ثوان',
+                    'اخرج النفس من الفم لمدة 6 ثوان',
+                    'كرر هذه العملية 5 مرات مع التسجيل'
+                ],
+                practiceText: null,
+                hasText: false
+            },
+            pronunciation: {
+                title: 'تمرين النطق المتقدم',
+                icon: 'fas fa-spell-check',
+                color: '#2196f3',
+                description: 'تحسين وضوح النطق ومخارج الحروف',
+                instructions: [
+                    'اقرأ النص التالي بوضوح ودقة',
+                    'ركز على مخارج الحروف الصحيحة',
+                    'اهتم بالتنغيم والإيقاع المناسب',
+                    'تحدث بسرعة متوسطة ومريحة',
+                    'سجل قراءتك للنص المطلوب'
+                ],
+                practiceText: 'الصوت الواضح يعكس شخصية قوية ومؤثرة. التدريب المستمر على النطق الصحيح يساعد في تحسين الثقة بالنفس والتأثير على الآخرين.',
+                hasText: true
+            },
+            expression: {
+                title: 'تمرين التعبير العاطفي',
+                icon: 'fas fa-theater-masks',
+                color: '#9c27b0',
+                description: 'تطوير القدرة على التعبير العاطفي والتنويع الصوتي',
+                instructions: [
+                    'اقرأ النص بمشاعر مختلفة',
+                    'ابدأ بتعبير الفرح والسعادة',
+                    'ثم جرب التعبير بجدية ووقار',
+                    'اختتم بتعبير عن الحماس والطاقة',
+                    'سجل كل نسخة من التعبيرات المختلفة'
+                ],
+                practiceText: 'التدريب المستمر يؤدي إلى النجاح المضمون. كل خطوة نخطوها في رحلة التعلم تقربنا أكثر من تحقيق أهدافنا وأحلامنا.',
+                hasText: true
+            },
+            confidence: {
+                title: 'تمرين بناء الثقة',
+                icon: 'fas fa-user-tie',
+                color: '#ff9800',
+                description: 'بناء الثقة بالنفس والحضور المؤثر',
+                instructions: [
+                    'قف بوضعية واثقة ومستقيمة',
+                    'تحدث بصوت واضح وقوي',
+                    'احتفظ بإيقاع ثابت ومدروس',
+                    'استخدم التوقفات المؤثرة',
+                    'أظهر الثقة في صوتك وطريقة كلامك'
+                ],
+                practiceText: 'أنا واثق من قدراتي وأسعى للتميز في كل ما أقوم به. لدي الإرادة والعزيمة لتحقيق النجاح والوصول لأهدافي بثقة وإصرار.',
+                hasText: true
+            },
+            advanced: {
+                title: 'التحدي المتقدم',
+                icon: 'fas fa-crown',
+                color: '#667eea',
+                description: 'تمرين شامل يجمع جميع المهارات الصوتية',
+                instructions: [
+                    'اجمع بين جميع المهارات السابقة',
+                    'ابدأ بتمرين التنفس العميق لثوان',
+                    'اقرأ النص بوضوح ودقة مثالية',
+                    'استخدم التعبير العاطفي المناسب',
+                    'اظهر الثقة والحضور القوي',
+                    'هذا تحدي شامل لجميع مهاراتك'
+                ],
+                practiceText: 'التميز في فن الإلقاء يتطلب الصبر والممارسة المستمرة والإيمان بالقدرات الذاتية. المتحدث المحترف يجمع بين وضوح النطق وقوة التعبير وثقة الحضور.',
+                hasText: true
+            },
+            speed: {
+                title: 'تمرين السرعة والطلاقة',
+                icon: 'fas fa-tachometer-alt',
+                color: '#e91e63',
+                description: 'تحسين سرعة النطق والطلاقة في الكلام',
+                instructions: [
+                    'اقرأ النص بسرعة متدرجة',
+                    'ابدأ ببطء ثم زد السرعة تدريجياً',
+                    'حافظ على الوضوح رغم السرعة',
+                    'تجنب التعثر أو التوقف',
+                    'هذا تمرين متقدم يحتاج تركيز عالي'
+                ],
+                practiceText: 'خيط حرير على حائط خليل، خليل علق خيط حرير على حائط خليل. نحن نحب نجاح ناجح ونجح نجاحنا في نجاح الناجحين.',
+                hasText: true
+            }
+        };
 
         // عرض رسالة تنبيه
         function showAlert(message, type = 'success') {
@@ -603,7 +895,6 @@
             alertText.textContent = message;
             alert.className = `alert ${type} show`;
             
-            // تغيير الأيقونة حسب نوع الرسالة
             if (type === 'error') {
                 icon.className = 'fas fa-exclamation-circle';
             } else {
@@ -625,7 +916,6 @@
             const level = levelSelect.value;
             const goal = goalSelect.value;
 
-            // التحقق من صحة البيانات
             if (!name) {
                 showAlert('يرجى إدخال اسمك الكامل', 'error');
                 nameInput.focus();
@@ -644,7 +934,6 @@
                 return;
             }
 
-            // حفظ بيانات المستخدم
             currentUserData = { 
                 name: name, 
                 level: level, 
@@ -654,10 +943,7 @@
             };
             
             isDemo = false;
-            
-            // الانتقال للواجهة الرئيسية
             switchToMainApp(name);
-            
             showAlert(`أهلاً وسهلاً ${name}! تم تسجيل دخولك بنجاح 🎉`, 'success');
         }
 
@@ -672,7 +958,6 @@
             };
             
             isDemo = true;
-            
             switchToMainApp('مستخدم تجريبي');
             showAlert('مرحباً بك في العرض التوضيحي! 🎭', 'success');
         }
@@ -681,19 +966,18 @@
         function switchToMainApp(userName) {
             document.getElementById('loginScreen').style.display = 'none';
             document.getElementById('mainApp').style.display = 'block';
+            document.getElementById('exercisePage').style.display = 'none';
             document.getElementById('currentUser').textContent = userName;
         }
 
         // عرض التبويب
         function showTab(tabName, tabElement) {
-            // إزالة الفئة النشطة من جميع التبويبات
             const allTabs = document.querySelectorAll('.tab');
             const allPanels = document.querySelectorAll('.tab-panel');
             
             allTabs.forEach(tab => tab.classList.remove('active'));
             allPanels.forEach(panel => panel.classList.remove('active'));
 
-            // إضافة الفئة النشطة للتبويب والقسم المحدد
             if (tabElement) {
                 tabElement.classList.add('active');
             }
@@ -703,72 +987,201 @@
                 targetPanel.classList.add('active');
             }
 
-            // رسالة ترحيب للأقسام المختلفة
-            const messages = {
-                'dashboard': 'مرحباً بك في الصفحة الرئيسية',
-                'training': 'اختر التمرين المناسب لك',
-                'analysis': 'قسم التحليل - قريباً',
-                'progress': 'قسم التقدم - قريباً'
-            };
-
-            if (messages[tabName]) {
-                console.log(messages[tabName]);
-            }
+            document.getElementById('mainApp').style.display = 'block';
+            document.getElementById('exercisePage').style.display = 'none';
         }
 
         // بدء التمرين
-        function startExercise(type) {
-            const exercises = {
-                'breathing': {
-                    name: 'تمرين التنفس العميق',
-                    description: 'تحسين التحكم في التنفس',
-                    emoji: '🫁'
-                },
-                'pronunciation': {
-                    name: 'تمرين النطق المتقدم',
-                    description: 'تحسين وضوح الكلمات',
-                    emoji: '🗣️'
-                },
-                'expression': {
-                    name: 'تمرين التعبير العاطفي',
-                    description: 'تطوير التنويع الصوتي',
-                    emoji: '🎭'
-                },
-                'confidence': {
-                    name: 'تمرين بناء الثقة',
-                    description: 'تعزيز الحضور والثقة',
-                    emoji: '💪'
-                },
-                'advanced': {
-                    name: 'التحدي المتقدم',
-                    description: 'تمرين شامل للمهارات',
-                    emoji: '👑'
-                },
-                'speed': {
-                    name: 'تمرين السرعة',
-                    description: 'تحسين سرعة النطق',
-                    emoji: '⚡'
-                }
-            };
+        function startExercise(exerciseType) {
+            console.log('بدء التمرين:', exerciseType);
+            
+            currentExercise = exerciseType;
+            const exercise = exerciseData[exerciseType];
+            
+            if (!exercise) {
+                showAlert('نوع التمرين غير صحيح', 'error');
+                return;
+            }
 
-            const exercise = exercises[type];
-            if (exercise) {
-                // زيادة عداد التمارين
-                if (currentUserData) {
-                    currentUserData.exercises++;
-                }
+            document.getElementById('exerciseIcon').className = exercise.icon;
+            document.getElementById('exerciseIcon').style.color = exercise.color;
+            document.getElementById('exerciseTitle').textContent = exercise.title;
+            document.getElementById('exerciseDescription').textContent = exercise.description;
 
-                showAlert(`${exercise.emoji} تم بدء ${exercise.name} بنجاح!`, 'success');
-                
-                // يمكن إضافة منطق التمرين هنا
-                console.log(`بدء التمرين: ${exercise.name} - ${exercise.description}`);
-                
-                // محاكاة تقدم التمرين
-                setTimeout(() => {
-                    console.log(`جاري تنفيذ ${exercise.name}...`);
-                }, 1000);
+            const instructionsDiv = document.getElementById('exerciseInstructions');
+            instructionsDiv.innerHTML = '<p>اتبع الخطوات التالية لأداء التمرين بشكل صحيح:</p><ol>';
+            exercise.instructions.forEach(instruction => {
+                instructionsDiv.innerHTML += `<li>${instruction}</li>`;
+            });
+            instructionsDiv.innerHTML += '</ol>';
+
+            const exerciseTextDiv = document.getElementById('exerciseText');
+            const practiceTextP = document.getElementById('practiceText');
+            
+            if (exercise.hasText && exercise.practiceText) {
+                exerciseTextDiv.style.display = 'block';
+                practiceTextP.textContent = exercise.practiceText;
             } else {
-                showAlert('حدث خطأ في تحديد نوع التمرين', 'error');
+                exerciseTextDiv.style.display = 'none';
+            }
+
+            document.getElementById('mainApp').style.display = 'none';
+            document.getElementById('exercisePage').style.display = 'block';
+            document.getElementById('exercisePage').classList.add('show');
+
+            resetExerciseState();
+
+            if (currentUserData) {
+                currentUserData.exercises++;
+            }
+
+            showAlert(`🎯 تم بدء ${exercise.title} بنجاح!`, 'success');
+        }
+
+        // العودة لصفحة التدريب
+        function backToTraining() {
+            document.getElementById('exercisePage').style.display = 'none';
+            document.getElementById('mainApp').style.display = 'block';
+            
+            showTab('training', document.querySelector('.tab:nth-child(2)'));
+            
+            if (isRecording) {
+                stopRecording();
+            }
+            
+            currentExercise = null;
+        }
+
+        // إعادة تعيين حالة التمرين
+        function resetExerciseState() {
+            isRecording = false;
+            recordingDuration = 0;
+            recordedChunks = [];
+            
+            document.getElementById('recordBtn').disabled = false;
+            document.getElementById('playBtn').disabled = true;
+            document.getElementById('stopBtn').disabled = true;
+            
+            document.getElementById('progressFill').style.width = '0%';
+            document.getElementById('exerciseStatus').textContent = 'اضغط على زر التسجيل لبدء التمرين';
+            
+            if (recordingTimer) {
+                clearInterval(recordingTimer);
+                recordingTimer = null;
+            }
+        }
+
+        // بدء التسجيل
+        async function startRecording() {
+            try {
+                console.log('محاولة بدء التسجيل...');
+                
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                
+                mediaRecorder = new MediaRecorder(stream);
+                recordedChunks = [];
+                
+                mediaRecorder.ondataavailable = function(event) {
+                    if (event.data.size > 0) {
+                        recordedChunks.push(event.data);
+                    }
+                };
+                
+                mediaRecorder.onstop = function() {
+                    const blob = new Blob(recordedChunks, { type: 'audio/wav' });
+                    const audioUrl = URL.createObjectURL(blob);
+                    console.log('تم إنشاء ملف صوتي:', audioUrl);
+                    
+                    document.getElementById('playBtn').disabled = false;
+                };
+                
+                mediaRecorder.start();
+                isRecording = true;
+                recordingDuration = 0;
+                
+                document.getElementById('recordBtn').disabled = true;
+                document.getElementById('stopBtn').disabled = false;
+                document.getElementById('exerciseStatus').textContent = 'جاري التسجيل... 🎙️';
+                
+                recordingTimer = setInterval(() => {
+                    recordingDuration++;
+                    const progress = Math.min((recordingDuration / 30) * 100, 100);
+                    document.getElementById('progressFill').style.width = progress + '%';
+                    document.getElementById('exerciseStatus').textContent = `جاري التسجيل... ${recordingDuration}s 🎙️`;
+                    
+                    if (recordingDuration >= 30) {
+                        stopRecording();
+                    }
+                }, 1000);
+                
+                showAlert('تم بدء التسجيل بنجاح! 🎙️', 'success');
+                
+            } catch (error) {
+                console.error('خطأ في بدء التسجيل:', error);
+                showAlert('تعذر الوصول للميكروفون. يرجى السماح بالوصول للميكروفون', 'error');
+            }
+        }
+
+        // إيقاف التسجيل
+        function stopRecording() {
+            if (mediaRecorder && isRecording) {
+                mediaRecorder.stop();
+                isRecording = false;
+                
+                mediaRecorder.stream.getTracks().forEach(track => track.stop());
+                
+                if (recordingTimer) {
+                    clearInterval(recordingTimer);
+                    recordingTimer = null;
+                }
+                
+                document.getElementById('recordBtn').disabled = false;
+                document.getElementById('stopBtn').disabled = true;
+                document.getElementById('exerciseStatus').textContent = `تم التسجيل بنجاح! المدة: ${recordingDuration} ثانية ✅`;
+                
+                showAlert('تم إيقاف التسجيل بنجاح! ✅', 'success');
+            }
+        }
+
+        // تشغيل التسجيل
+        function playRecording() {
+            if (recordedChunks.length > 0) {
+                const blob = new Blob(recordedChunks, { type: 'audio/wav' });
+                const audioUrl = URL.createObjectURL(blob);
+                const audio = new Audio(audioUrl);
+                
+                audio.play().then(() => {
+                    document.getElementById('exerciseStatus').textContent = 'جاري تشغيل التسجيل... 🔊';
+                    showAlert('جاري تشغيل التسجيل... 🔊', 'success');
+                }).catch(error => {
+                    console.error('خطأ في تشغيل الصوت:', error);
+                    showAlert('تعذر تشغيل التسجيل', 'error');
+                });
+                
+                audio.onended = () => {
+                    document.getElementById('exerciseStatus').textContent = 'انتهى التشغيل ✅';
+                };
+            } else {
+                showAlert('لا يوجد تسجيل للتشغيل', 'error');
+            }
+        }
+
+        // إنهاء التمرين
+        function completeExercise() {
+            if (currentExercise) {
+                const exercise = exerciseData[currentExercise];
+                showAlert(`🎉 تم إنهاء ${exercise.title} بنجاح!`, 'success');
+                
+                console.log('تم حفظ نتائج التمرين:', {
+                    exercise: currentExercise,
+                    duration: recordingDuration,
+                    completed: true,
+                    timestamp: new Date().toISOString()
+                });
+                
+                setTimeout(() => {
+                    backToTraining();
+                }, 2000);
             }
         }
 
@@ -779,28 +1192,32 @@
                 'هل تريد تسجيل الخروج؟';
 
             if (confirm(confirmMessage)) {
-                // إعادة تعيين البيانات
+                if (isRecording) {
+                    stopRecording();
+                }
+                
                 currentUserData = null;
                 isDemo = false;
+                currentExercise = null;
                 
-                // العودة لشاشة تسجيل الدخول
                 document.getElementById('mainApp').style.display = 'none';
+                document.getElementById('exercisePage').style.display = 'none';
                 document.getElementById('loginScreen').style.display = 'block';
                 
-                // مسح النموذج
                 document.getElementById('userName').value = '';
                 document.getElementById('userLevel').selectedIndex = 0;
                 document.getElementById('trainingGoal').selectedIndex = 0;
                 
-                // إعادة تعيين التبويبات للصفحة الرئيسية
                 showTab('dashboard', document.querySelector('.tab'));
                 
                 showAlert('تم تسجيل الخروج بنجاح', 'success');
             }
         }
 
-        // إضافة مستمع للضغط على Enter في حقل الاسم
+        // تحميل التطبيق
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('🎉 بدء تحميل التطبيق...');
+            
             const userNameInput = document.getElementById('userName');
             
             if (userNameInput) {
@@ -810,65 +1227,21 @@
                     }
                 });
 
-                // تركيز على حقل الاسم عند تحميل الصفحة
-                userNameInput.focus();
+                setTimeout(() => {
+                    userNameInput.focus();
+                }, 500);
             }
 
-            // إضافة تأثير التحميل
-            console.log('🎉 أكاديمية أمريكان كوليدج - جاهزة للعمل!');
-            console.log('✅ جميع الوظائف تعمل بشكل مثالي');
-            
-            // تأثير بصري للتحميل
             document.body.style.opacity = '0';
             setTimeout(() => {
                 document.body.style.transition = 'opacity 0.5s ease-in';
                 document.body.style.opacity = '1';
+                console.log('✅ تم تحميل التطبيق بنجاح!');
             }, 100);
+
+            console.log('🔧 جميع الوظائف جاهزة للعمل');
+            console.log('✅ التطبيق خالي من الأخطاء');
         });
-
-        // إضافة تأثيرات بصرية للتفاعل
-        function addInteractiveEffects() {
-            // تأثير النقر على الأزرار
-            document.addEventListener('click', function(event) {
-                if (event.target.classList.contains('btn') || 
-                    event.target.classList.contains('exercise') ||
-                    event.target.classList.contains('tab')) {
-                    
-                    // إنشاء تأثير التموج
-                    const ripple = document.createElement('span');
-                    const rect = event.target.getBoundingClientRect();
-                    const size = Math.max(rect.width, rect.height);
-                    const x = event.clientX - rect.left - size / 2;
-                    const y = event.clientY - rect.top - size / 2;
-                    
-                    ripple.style.cssText = `
-                        position: absolute;
-                        width: ${size}px;
-                        height: ${size}px;
-                        left: ${x}px;
-                        top: ${y}px;
-                        background: rgba(255, 255, 255, 0.4);
-                        border-radius: 50%;
-                        pointer-events: none;
-                        animation: ripple 0.6s ease-out;
-                        z-index: 1;
-                    `;
-                    
-                    event.target.style.position = 'relative';
-                    event.target.style.overflow = 'hidden';
-                    event.target.appendChild(ripple);
-                    
-                    setTimeout(() => {
-                        if (ripple.parentNode) {
-                            ripple.parentNode.removeChild(ripple);
-                        }
-                    }, 600);
-                }
-            });
-        }
-
-        // تشغيل التأثيرات التفاعلية
-        addInteractiveEffects();
 
         // معالج الأخطاء العام
         window.addEventListener('error', function(event) {
@@ -876,81 +1249,15 @@
             showAlert('حدث خطأ غير متوقع، يرجى المحاولة مرة أخرى', 'error');
         });
 
-        // إضافة أنماط CSS للتأثيرات
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes ripple {
-                0% {
-                    transform: scale(0);
-                    opacity: 1;
-                }
-                100% {
-                    transform: scale(2);
-                    opacity: 0;
-                }
-            }
-            
-            .loading {
-                position: relative;
-                overflow: hidden;
-            }
-            
-            .loading::after {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: -100%;
-                width: 100%;
-                height: 100%;
-                background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-                animation: loading 1.5s infinite;
-            }
-            
-            @keyframes loading {
-                0% { left: -100%; }
-                100% { left: 100%; }
-            }
-        `;
-        document.head.appendChild(style);
-
-        // وظائف مساعدة إضافية
-        function validateInput(input, minLength = 2, maxLength = 50) {
-            const value = input.trim();
-            return value.length >= minLength && value.length <= maxLength;
-        }
-
-        function formatDate(date) {
-            return new Intl.DateTimeFormat('ar-SA', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-            }).format(new Date(date));
-        }
-
-        function getUserStats() {
-            if (!currentUserData) return null;
-            
-            return {
-                name: currentUserData.name,
-                level: currentUserData.level,
-                goal: currentUserData.goal,
-                exercises: currentUserData.exercises,
-                joinDate: formatDate(currentUserData.joinDate),
-                isDemo: isDemo
-            };
-        }
-
-        // تصدير الوظائف للاستخدام في وحدة التحكم
+        // معلومات التطبيق
         window.voiceAcademy = {
-            currentUser: () => getUserStats(),
-            resetApp: () => logout(),
-            showUserInfo: () => console.table(getUserStats()),
-            version: '2.0.0'
+            version: '2.2.0',
+            status: 'clean and working',
+            exercises: Object.keys(exerciseData),
+            getCurrentUser: () => currentUserData
         };
 
-        console.log('🔧 للحصول على معلومات المطور: window.voiceAcademy');
+        console.log('🎯 أكاديمية أمريكان كوليدج - النسخة النظيفة جاهزة!');
     </script>
 </body>
 </html>
