@@ -1,5 +1,5 @@
 /* ========================================
-   أكاديمية الإعلام الاحترافية - ملف التصميم
+   أكاديمية امريكان كوليدج الاحترافية - ملف التصميم
    ======================================== */
 
 /* إعادة تعيين الأساسيات */
@@ -48,14 +48,6 @@
     --spacing-md: 1.5rem;
     --spacing-lg: 2rem;
     --spacing-xl: 3rem;
-}
-
-/* الوضع المظلم */
-@media (prefers-color-scheme: dark) {
-    :root {
-        --background-gradient: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
-        --card-gradient: linear-gradient(135deg, #34495e 0%, #2c3e50 100%);
-    }
 }
 
 /* الخط الأساسي */
@@ -194,37 +186,20 @@ body {
     position: relative;
 }
 
-.login-header::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
-    opacity: 0.1;
-}
-
 .logo {
     font-size: 3rem;
     margin-bottom: var(--spacing-md);
-    position: relative;
-    z-index: 1;
 }
 
 .login-header h1 {
     font-size: var(--font-size-xl);
     margin-bottom: var(--spacing-sm);
     font-weight: 700;
-    position: relative;
-    z-index: 1;
 }
 
 .login-header p {
     opacity: 0.9;
     font-size: var(--font-size-normal);
-    position: relative;
-    z-index: 1;
 }
 
 .login-form {
@@ -286,7 +261,7 @@ body {
    الأزرار
    ======================================== */
 
-.btn-primary, .btn-secondary, .btn-demo, .btn-ai, .nav-btn {
+.btn-primary, .btn-secondary, .btn-demo, .btn-ai, .nav-btn, .btn-danger {
     padding: var(--spacing-md) var(--spacing-lg);
     border: none;
     border-radius: var(--border-radius-small);
@@ -304,7 +279,7 @@ body {
     overflow: hidden;
 }
 
-.btn-primary, .btn-secondary, .btn-demo, .btn-ai {
+.btn-primary, .btn-secondary, .btn-demo, .btn-ai, .btn-danger {
     width: 100%;
     margin-bottom: var(--spacing-md);
 }
@@ -345,30 +320,15 @@ body {
     box-shadow: 0 4px 15px rgba(156, 39, 176, 0.3);
 }
 
-.btn-demo:hover, .btn-ai:hover {
+.btn-danger {
+    background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(244, 67, 54, 0.3);
+}
+
+.btn-demo:hover, .btn-ai:hover, .btn-danger:hover {
     transform: translateY(-3px);
     box-shadow: 0 8px 25px rgba(255, 152, 0, 0.4);
-}
-
-/* تأثير الموجة عند الضغط */
-.btn-primary::before, .btn-secondary::before, .btn-demo::before, .btn-ai::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 0;
-    height: 0;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.3);
-    transform: translate(-50%, -50%);
-    transition: width 0.6s, height 0.6s;
-    z-index: 0;
-}
-
-.btn-primary:active::before, .btn-secondary:active::before, 
-.btn-demo:active::before, .btn-ai:active::before {
-    width: 300px;
-    height: 300px;
 }
 
 .login-footer {
@@ -712,6 +672,7 @@ body {
 
 .progress-circle {
     transform: rotate(-90deg);
+    transition: stroke-dashoffset 1s ease;
 }
 
 .progress-text {
@@ -753,6 +714,324 @@ body {
 
 .goal-item i {
     width: 20px;
+}
+
+/* التمارين المقترحة */
+.recommendation-item {
+    background: #f8f9fa;
+    border-radius: var(--border-radius-small);
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    cursor: pointer;
+    transition: var(--transition);
+    border: 2px solid transparent;
+}
+
+.recommendation-item:hover {
+    background: white;
+    border-color: var(--primary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+}
+
+.rec-icon {
+    width: 50px;
+    height: 50px;
+    background: var(--background-gradient);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+}
+
+.rec-content {
+    flex: 1;
+}
+
+.rec-content h4 {
+    margin-bottom: 0.5rem;
+    color: #333;
+    font-size: 1.1rem;
+}
+
+.rec-content p {
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+.rec-difficulty {
+    padding: 0.25rem 0.5rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.rec-difficulty.easy {
+    background: rgba(76, 175, 80, 0.1);
+    color: #4CAF50;
+}
+
+.rec-difficulty.medium {
+    background: rgba(255, 152, 0, 0.1);
+    color: #FF9800;
+}
+
+.rec-difficulty.hard {
+    background: rgba(244, 67, 54, 0.1);
+    color: #f44336;
+}
+
+.rec-time {
+    color: var(--primary-color);
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+/* ========================================
+   قسم التدريب
+   ======================================== */
+
+.training-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.training-header {
+    text-align: center;
+    margin-bottom: var(--spacing-xl);
+}
+
+.training-header h2 {
+    color: #333;
+    margin-bottom: var(--spacing-sm);
+    font-size: var(--font-size-2xl);
+}
+
+.training-header p {
+    color: #666;
+    font-size: var(--font-size-large);
+}
+
+.exercises-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--spacing-lg);
+    margin-top: var(--spacing-xl);
+}
+
+.exercise-card {
+    background: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--card-shadow);
+    padding: var(--spacing-xl);
+    text-align: center;
+    cursor: pointer;
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+}
+
+.exercise-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--card-shadow-hover);
+}
+
+.exercise-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--primary-color);
+}
+
+.exercise-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto var(--spacing-lg);
+    font-size: 2rem;
+    color: white;
+}
+
+.exercise-icon.breathing {
+    background: linear-gradient(135deg, #4CAF50, #45a049);
+}
+
+.exercise-icon.pronunciation {
+    background: linear-gradient(135deg, #2196F3, #1976D2);
+}
+
+.exercise-icon.expression {
+    background: linear-gradient(135deg, #9C27B0, #7B1FA2);
+}
+
+.exercise-icon.confidence {
+    background: linear-gradient(135deg, #FF9800, #F57C00);
+}
+
+.exercise-icon.advanced {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+}
+
+.exercise-card h3 {
+    margin-bottom: var(--spacing-md);
+    color: #333;
+    font-size: var(--font-size-xl);
+}
+
+.exercise-card p {
+    color: #666;
+    margin-bottom: var(--spacing-lg);
+    line-height: 1.6;
+}
+
+.exercise-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: var(--spacing-md);
+    border-top: 1px solid #eee;
+}
+
+.difficulty {
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.difficulty.easy {
+    background: rgba(76, 175, 80, 0.1);
+    color: #4CAF50;
+}
+
+.difficulty.medium {
+    background: rgba(255, 152, 0, 0.1);
+    color: #FF9800;
+}
+
+.difficulty.hard {
+    background: rgba(244, 67, 54, 0.1);
+    color: #f44336;
+}
+
+.duration {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+/* ========================================
+   نوافذ التمارين
+   ======================================== */
+
+.exercise-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+    backdrop-filter: blur(5px);
+    animation: fadeIn 0.3s ease;
+}
+
+.exercise-container {
+    background: white;
+    border-radius: var(--border-radius);
+    max-width: 90vw;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: var(--card-shadow-hover);
+    position: relative;
+    animation: slideInUp 0.3s ease;
+}
+
+.exercise-header {
+    background: var(--background-gradient);
+    color: white;
+    padding: var(--spacing-lg);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.exercise-header h2 {
+    margin: 0;
+    font-size: var(--font-size-xl);
+}
+
+.close-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    font-size: var(--font-size-xl);
+    cursor: pointer;
+    padding: var(--spacing-sm);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+}
+
+.close-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.exercise-content {
+    padding: var(--spacing-xl);
+}
+
+.exercise-description {
+    margin-bottom: var(--spacing-lg);
+    padding: var(--spacing-md);
+    background: #f8f9fa;
+    border-radius: var(--border-radius-small);
+    border-left: 4px solid var(--primary-color);
+}
+
+.exercise-steps ol,
+.exercise-tips ul {
+    padding-right: var(--spacing-lg);
+    line-height: 1.8;
+}
+
+.exercise-steps h3,
+.exercise-tips h3 {
+    margin-bottom: var(--spacing-sm);
+    color: var(--primary-color);
+}
+
+.exercise-controls {
+    display: flex;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-xl);
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.exercise-controls button {
+    min-width: 150px;
 }
 
 /* ========================================
@@ -982,10 +1261,26 @@ body {
     to { opacity: 1; }
 }
 
-/* تأثير التركيز لإمكانية الوصول */
-button:focus, input:focus, select:focus {
-    outline: 2px solid var(--primary-color);
-    outline-offset: 2px;
+/* ========================================
+   الحالات الخاصة
+   ======================================== */
+
+.hidden {
+    display: none !important;
+}
+
+.invisible {
+    visibility: hidden !important;
+}
+
+.interactive-card {
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+.interactive-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--card-shadow-hover);
 }
 
 /* ========================================
@@ -1044,7 +1339,8 @@ button:focus, input:focus, select:focus {
     }
     
     .dashboard-container,
-    .stats-grid {
+    .stats-grid,
+    .exercises-grid {
         grid-template-columns: 1fr;
     }
     
@@ -1064,14 +1360,6 @@ button:focus, input:focus, select:focus {
         max-width: 95vw;
     }
     
-    .login-header {
-        padding: var(--spacing-lg) var(--spacing-md);
-    }
-    
-    .login-form {
-        padding: var(--spacing-lg) var(--spacing-md);
-    }
-    
     .floating-player {
         bottom: var(--spacing-sm);
         right: var(--spacing-sm);
@@ -1079,17 +1367,18 @@ button:focus, input:focus, select:focus {
         max-width: none;
     }
     
-    .modal-content {
+    .exercise-container {
         max-width: 95vw;
         margin: var(--spacing-sm);
     }
     
-    .loading-bar {
-        width: 250px;
+    .exercise-controls {
+        flex-direction: column;
     }
     
-    .loading-content h2 {
-        font-size: var(--font-size-xl);
+    .exercise-controls button {
+        width: 100%;
+        min-width: auto;
     }
 }
 
@@ -1129,81 +1418,17 @@ button:focus, input:focus, select:focus {
     .progress-ring {
         transform: scale(0.8);
     }
-    
-    .nav-actions {
-        gap: 0;
-    }
-    
-    .nav-btn {
-        width: 40px;
-        height: 40px;
-        font-size: var(--font-size-normal);
-    }
-}
-
-/* ========================================
-   طباعة المستندات
-   ======================================== */
-
-@media print {
-    .top-nav,
-    .main-tabs,
-    .floating-player,
-    .modal,
-    .notification-bar,
-    .nav-actions,
-    .btn-primary,
-    .btn-secondary,
-    .btn-demo,
-    .btn-ai {
-        display: none !important;
-    }
-    
-    .tab-panel {
-        display: block !important;
-    }
-    
-    .section {
-        display: block !important;
-    }
-    
-    body {
-        background: white !important;
-        color: black !important;
-        font-size: 12pt;
-        line-height: 1.4;
-    }
-    
-    .welcome-card,
-    .stats-grid .stat-card,
-    .daily-progress-card {
-        box-shadow: none !important;
-        border: 1px solid #ccc !important;
-        break-inside: avoid;
-        margin-bottom: 1rem;
-    }
-    
-    .dashboard-container {
-        display: block;
-    }
-    
-    .stats-grid {
-        display: block;
-    }
-    
-    .stat-card {
-        display: inline-block;
-        width: 48%;
-        margin: 1% 1% 1rem 0;
-        vertical-align: top;
-    }
 }
 
 /* ========================================
    تحسينات إمكانية الوصول
    ======================================== */
 
-/* تقليل الحركة للمستخدمين الذين يفضلون ذلك */
+button:focus, input:focus, select:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
 @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
@@ -1213,129 +1438,12 @@ button:focus, input:focus, select:focus {
         transition-duration: 0.01ms !important;
         scroll-behavior: auto !important;
     }
-    
-    .ai-avatar {
-        animation: none;
-    }
-    
-    .loading-progress {
-        animation: none;
-        width: 100%;
-    }
-}
-
-/* تحسين التباين للمستخدمين الذين يحتاجون ذلك */
-@media (prefers-contrast: high) {
-    :root {
-        --primary-color: #000080;
-        --secondary-color: #4B0082;
-        --accent-color: #006400;
-        --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-    }
-    
-    .input-group input,
-    .input-group select {
-        border-width: 3px;
-    }
-    
-    .btn-primary,
-    .btn-secondary,
-    .btn-demo,
-    .btn-ai {
-        border: 2px solid;
-    }
-}
-
-/* إخفاء العناصر بصرياً مع الحفاظ على إمكانية الوصول */
-.visually-hidden {
-    position: absolute !important;
-    width: 1px !important;
-    height: 1px !important;
-    padding: 0 !important;
-    margin: -1px !important;
-    overflow: hidden !important;
-    clip: rect(0, 0, 0, 0) !important;
-    white-space: nowrap !important;
-    border: 0 !important;
-}
-
-/* ========================================
-   تحسينات الأداء
-   ======================================== */
-
-/* تسريع الرسوميات باستخدام GPU */
-.welcome-card,
-.stat-card,
-.tab-btn,
-.btn-primary,
-.btn-secondary,
-.btn-demo,
-.btn-ai,
-.modal-content,
-.floating-player {
-    will-change: transform;
-    transform: translateZ(0);
-}
-
-/* تحسين تحميل الخطوط */
-@font-face {
-    font-family: 'Cairo';
-    font-display: swap;
-}
-
-/* ========================================
-   تأثيرات خاصة للذكاء الاصطناعي
-   ======================================== */
-
-.ai-thinking {
-    position: relative;
-    overflow: hidden;
-}
-
-.ai-thinking::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.2), transparent);
-    animation: aiThinking 2s infinite;
-}
-
-@keyframes aiThinking {
-    0% { left: -100%; }
-    100% { left: 100%; }
-}
-
-/* تأثير الجسيمات للخلفية */
-.section::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-image: 
-        radial-gradient(circle at 25% 25%, rgba(102, 126, 234, 0.05) 2px, transparent 2px),
-        radial-gradient(circle at 75% 75%, rgba(118, 75, 162, 0.05) 2px, transparent 2px);
-    background-size: 100px 100px;
-    background-position: 0 0, 50px 50px;
-    animation: floatingParticles 20s linear infinite;
-    pointer-events: none;
-    z-index: -1;
-}
-
-@keyframes floatingParticles {
-    0% { transform: translateY(0); }
-    100% { transform: translateY(-100px); }
 }
 
 /* ========================================
    تخصيص شريط التمرير
    ======================================== */
 
-/* للمتصفحات الحديثة */
 ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
@@ -1357,154 +1465,7 @@ button:focus, input:focus, select:focus {
     opacity: 1;
 }
 
-/* للفايرفوكس */
 * {
     scrollbar-width: thin;
     scrollbar-color: var(--primary-color) #f1f1f1;
 }
-
-/* ========================================
-   تأثيرات التحميل والانتظار
-   ======================================== */
-
-.loading-spinner {
-    width: 40px;
-    height: 40px;
-    border: 4px solid #f3f3f3;
-    border-top: 4px solid var(--primary-color);
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin: var(--spacing-md) auto;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-.pulse {
-    animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-    0% { opacity: 1; }
-    50% { opacity: 0.5; }
-    100% { opacity: 1; }
-}
-
-/* ========================================
-   حالات التفاعل المتقدمة
-   ======================================== */
-
-.interactive-card {
-    transition: var(--transition);
-    cursor: pointer;
-}
-
-.interactive-card:hover {
-    transform: translateY(-8px) scale(1.02);
-    box-shadow: var(--card-shadow-hover);
-}
-
-.interactive-card:active {
-    transform: translateY(-4px) scale(0.98);
-}
-
-/* تأثير النقر الموجي */
-.ripple {
-    position: relative;
-    overflow: hidden;
-}
-
-.ripple::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 0;
-    height: 0;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.6);
-    transform: translate(-50%, -50%);
-    transition: width 0.6s, height 0.6s;
-    z-index: 0;
-}
-
-.ripple:active::before {
-    width: 300px;
-    height: 300px;
-}
-
-/* ========================================
-   تحسينات نهائية
-   ======================================== */
-
-/* تحسين عرض النصوص */
-h1, h2, h3, h4, h5, h6 {
-    text-rendering: optimizeLegibility;
-    font-feature-settings: "liga" 1;
-}
-
-/* تحسين الصور */
-img {
-    max-width: 100%;
-    height: auto;
-    border-radius: var(--border-radius-small);
-}
-
-/* تحسين الجداول */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: var(--spacing-md) 0;
-}
-
-th, td {
-    padding: var(--spacing-sm);
-    text-align: right;
-    border-bottom: 1px solid #eee;
-}
-
-th {
-    background: #f8f9fa;
-    font-weight: 600;
-    color: var(--primary-color);
-}
-
-/* تحسين الكود */
-code, pre {
-    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-    background: #f8f9fa;
-    padding: 0.2rem 0.4rem;
-    border-radius: 4px;
-    font-size: 0.9em;
-}
-
-pre {
-    padding: var(--spacing-md);
-    overflow-x: auto;
-    border: 1px solid #e0e0e0;
-}
-
-/* الحالات الخاصة */
-.hidden {
-    display: none !important;
-}
-
-.invisible {
-    visibility: hidden !important;
-}
-
-.sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
-}
-
-/* نهاية ملف التصميم */
