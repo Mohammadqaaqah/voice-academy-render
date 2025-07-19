@@ -1,7 +1,7 @@
 {
   "name": "voice-academy-pro",
   "version": "2.0.0",
-  "description": "أكاديمية الإعلام الاحترافية - منصة تدريب متقدمة مدعومة بالذكاء الاصطناعي لتطوير المهارات الصوتية والإلقاء",
+  "description": "أكاديمية امريكان كوليدجالاحترافية - منصة تدريب متقدمة مدعومة بالذكاء الاصطناعي لتطوير المهارات الصوتية والإلقاء",
   "main": "server.js",
   "engines": {
     "node": ">=18.0.0",
@@ -10,11 +10,8 @@
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
-    "build": "echo 'Building for production...' && npm run optimize",
-    "optimize": "echo 'Optimizing assets...'",
+    "build": "echo 'Building for production...'",
     "test": "echo 'Running tests...' && exit 0",
-    "lint": "echo 'Linting code...' && exit 0",
-    "deploy": "echo 'Deploying to production...'",
     "postinstall": "echo 'Installation completed successfully!'"
   },
   "keywords": [
@@ -39,10 +36,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Mohammadqaaqah/voice-academy.git"
+    "url": "https://github.com/Mohammadqaaqah/voice-academy-render.git"
   },
   "bugs": {
-    "url": "https://github.com/Mohammadqaaqah/voice-academy/issues"
+    "url": "https://github.com/Mohammadqaaqah/voice-academy-render/issues"
   },
   "homepage": "https://voice-academy-pro.onrender.com",
   "dependencies": {
@@ -51,78 +48,15 @@
     "helmet": "^7.1.0",
     "compression": "^1.7.4",
     "morgan": "^1.10.0",
-    "serve-static": "^1.15.0",
     "dotenv": "^16.3.1"
   },
   "devDependencies": {
-    "nodemon": "^3.0.1",
-    "concurrently": "^8.2.2"
-  },
-  "peerDependencies": {
-    "node": ">=18.0.0"
-  },
-  "config": {
-    "port": "3000",
-    "host": "0.0.0.0"
+    "nodemon": "^3.0.1"
   },
   "browserslist": [
     "> 1%",
     "last 2 versions",
     "not ie <= 11",
     "not dead"
-  ],
-  "babel": {
-    "presets": [
-      [
-        "@babel/preset-env",
-        {
-          "targets": {
-            "browsers": ["> 1%", "last 2 versions"]
-          }
-        }
-      ]
-    ]
-  },
-  "eslintConfig": {
-    "extends": [
-      "eslint:recommended"
-    ],
-    "env": {
-      "browser": true,
-      "node": true,
-      "es6": true
-    },
-    "parserOptions": {
-      "ecmaVersion": 2022,
-      "sourceType": "module"
-    }
-  },
-  "prettier": {
-    "semi": true,
-    "singleQuote": true,
-    "tabWidth": 2,
-    "trailingComma": "es5"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run lint",
-      "pre-push": "npm run test"
-    }
-  },
-  "files": [
-    "*.js",
-    "*.html",
-    "*.css",
-    "*.json",
-    "README.md",
-    "LICENSE"
-  ],
-  "funding": {
-    "type": "github",
-    "url": "https://github.com/sponsors/Mohammadqaaqah"
-  },
-  "private": false,
-  "publishConfig": {
-    "access": "public"
-  }
+  ]
 }
