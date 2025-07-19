@@ -11,42 +11,472 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
     
-    <!-- ملف التصميم -->
-    <link rel="stylesheet" href="styles.css">
-    
-    <!-- Meta Tags للمشاركة -->
-    <meta property="og:title" content="أكاديمية أمريكان كوليدج">
-    <meta property="og:description" content="منصة تدريب متقدمة مدعومة بالذكاء الاصطناعي لتطوير المهارات الصوتية والإلقاء">
-    <meta property="og:image" content="https://via.placeholder.com/1200x630/667eea/ffffff?text=🎙️+أكاديمية+أمريكان+كوليدج">
-    <meta property="og:url" content="https://voice-academy-pro.onrender.com">
-    <meta name="twitter:card" content="summary_large_image">
-    
-    <!-- PWA Meta -->
-    <meta name="theme-color" content="#667eea">
-    <link rel="manifest" href="manifest.json">
+    <!-- التصميم المضمن للضمان -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --accent-color: #4CAF50;
+            --warning-color: #FF9800;
+            --error-color: #f44336;
+            --success-color: #4CAF50;
+            --border-radius: 16px;
+            --border-radius-small: 8px;
+            --transition: all 0.3s ease;
+            --font-primary: 'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .section {
+            display: none;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* شاشة تسجيل الدخول */
+        .login-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: var(--border-radius);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            max-width: 500px;
+            margin: 5vh auto;
+            animation: slideInUp 0.8s ease;
+        }
+
+        .login-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .login-header h1 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .login-header p {
+            opacity: 0.9;
+            font-size: 1rem;
+        }
+
+        .login-form {
+            padding: 3rem 2rem;
+        }
+
+        .input-group {
+            margin-bottom: 2rem;
+        }
+
+        .input-group label {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .input-group label i {
+            margin-left: 0.5rem;
+            color: var(--primary-color);
+            width: 20px;
+        }
+
+        .input-group input,
+        .input-group select {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: var(--border-radius-small);
+            font-size: 1rem;
+            font-family: var(--font-primary);
+            transition: var(--transition);
+            background: #fafafa;
+        }
+
+        .input-group input:focus,
+        .input-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .input-group small {
+            display: block;
+            margin-top: 0.5rem;
+            color: #666;
+            font-size: 0.875rem;
+        }
+
+        .button-group {
+            margin-top: 2rem;
+        }
+
+        .btn-primary, .btn-secondary, .btn-demo {
+            width: 100%;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: var(--border-radius-small);
+            font-size: 1rem;
+            font-weight: 600;
+            font-family: var(--font-primary);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #333;
+            border: 2px solid #e0e0e0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-secondary:hover {
+            background: #f8f9fa;
+            border-color: var(--primary-color);
+        }
+
+        .btn-demo {
+            background: linear-gradient(135deg, #FF9800 0%, #FF5722 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 152, 0, 0.3);
+        }
+
+        .btn-demo:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 152, 0, 0.4);
+        }
+
+        .login-footer {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #eee;
+        }
+
+        .login-footer p {
+            color: #666;
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .login-footer i {
+            color: var(--success-color);
+        }
+
+        /* الواجهة الرئيسية */
+        #mainInterface {
+            background: #f5f7fa;
+            min-height: 100vh;
+        }
+
+        .top-nav {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            padding: 1rem 2rem;
+        }
+
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .main-tabs {
+            background: white;
+            display: flex;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 1.5rem 1rem;
+            border: none;
+            background: white;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            color: #666;
+            font-weight: 600;
+            position: relative;
+        }
+
+        .tab-btn.active {
+            color: var(--primary-color);
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .tab-btn.active::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--primary-color);
+        }
+
+        .tab-content {
+            padding: 2rem;
+        }
+
+        .tab-panel {
+            display: none;
+        }
+
+        .tab-panel.active {
+            display: block;
+        }
+
+        .training-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .training-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .training-header h2 {
+            color: #333;
+            margin-bottom: 1rem;
+            font-size: 2rem;
+        }
+
+        .exercises-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .exercise-card {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .exercise-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+        }
+
+        .exercise-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--primary-color);
+        }
+
+        .exercise-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2rem;
+            color: white;
+        }
+
+        .exercise-icon.breathing { background: linear-gradient(135deg, #4CAF50, #45a049); }
+        .exercise-icon.pronunciation { background: linear-gradient(135deg, #2196F3, #1976D2); }
+        .exercise-icon.expression { background: linear-gradient(135deg, #9C27B0, #7B1FA2); }
+        .exercise-icon.confidence { background: linear-gradient(135deg, #FF9800, #F57C00); }
+        .exercise-icon.advanced { background: linear-gradient(135deg, #667eea, #764ba2); }
+
+        .exercise-card h3 {
+            margin-bottom: 1rem;
+            color: #333;
+            font-size: 1.5rem;
+        }
+
+        .exercise-card p {
+            color: #666;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .exercise-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+        }
+
+        .difficulty {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .difficulty.easy { background: rgba(76, 175, 80, 0.1); color: #4CAF50; }
+        .difficulty.medium { background: rgba(255, 152, 0, 0.1); color: #FF9800; }
+        .difficulty.hard { background: rgba(244, 67, 54, 0.1); color: #f44336; }
+
+        .duration {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--success-color);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: var(--border-radius-small);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            display: none;
+        }
+
+        .notification.show {
+            display: block;
+            animation: slideInRight 0.3s ease;
+        }
+
+        .notification.error {
+            background: var(--error-color);
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* تجاوب الموبايل */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .login-card {
+                margin: 2vh auto;
+                max-width: 95vw;
+            }
+            
+            .exercises-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .main-tabs {
+                flex-direction: column;
+            }
+            
+            .tab-btn {
+                flex-direction: row;
+                justify-content: center;
+            }
+        }
+    </style>
 </head>
 <body>
-    <!-- شاشة التحميل -->
-    <div id="loadingScreen" class="loading-screen">
-        <div class="loading-content">
-            <div class="ai-logo">
-                <i class="fas fa-brain fa-pulse"></i>
-            </div>
-            <h2>🎙️ أكاديمية أمريكان كوليدج</h2>
-            <p>مدعوم بالذكاء الاصطناعي</p>
-            <div class="loading-bar">
-                <div class="loading-progress" id="loadingProgress"></div>
-            </div>
-            <p id="loadingText">جاري تحميل النظام...</p>
-            <!-- زر للمتابعة في حالة التوقف -->
-            <button id="skipLoading" style="display: none; margin-top: 20px; padding: 10px 20px; background: white; color: #667eea; border: none; border-radius: 5px; cursor: pointer;">
-                تخطي والمتابعة
-            </button>
-        </div>
-    </div>
-
     <!-- شاشة تسجيل الدخول -->
-    <div id="loginSection" class="section">
+    <div id="loginSection" class="section active">
         <div class="container">
             <div class="login-card">
                 <div class="login-header">
@@ -131,31 +561,9 @@
                     <span id="userWelcome">مرحباً</span>
                 </div>
                 
-                <div class="nav-stats">
-                    <div class="stat-item">
-                        <i class="fas fa-star"></i>
-                        <span id="userLevelDisplay">المستوى 1</span>
-                    </div>
-                    <div class="stat-item">
-                        <i class="fas fa-trophy"></i>
-                        <span id="userPointsDisplay">0 نقطة</span>
-                    </div>
-                    <div class="stat-item">
-                        <i class="fas fa-fire"></i>
-                        <span id="userStreakDisplay">0 يوم</span>
-                    </div>
-                </div>
-                
-                <div class="nav-actions">
-                    <button class="nav-btn" onclick="showNotifications()" title="الإشعارات">
-                        <i class="fas fa-bell"></i>
-                        <span class="notification-badge">3</span>
-                    </button>
-                    <button class="nav-btn" onclick="showProfile()" title="الملف الشخصي">
-                        <i class="fas fa-user-circle"></i>
-                    </button>
-                    <button class="nav-btn" onclick="logout()" title="تسجيل الخروج">
-                        <i class="fas fa-sign-out-alt"></i>
+                <div>
+                    <button onclick="logout()" style="background: none; border: none; color: #666; cursor: pointer; padding: 0.5rem;">
+                        <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
                     </button>
                 </div>
             </div>
@@ -163,23 +571,19 @@
 
         <!-- التبويبات الرئيسية -->
         <div class="main-tabs">
-            <button class="tab-btn active" data-tab="dashboard" onclick="switchTab('dashboard', this)">
+            <button class="tab-btn active" onclick="switchTab('dashboard', this)">
                 <i class="fas fa-tachometer-alt"></i>
                 <span>لوحة التحكم</span>
             </button>
-            <button class="tab-btn" data-tab="training" onclick="switchTab('training', this)">
+            <button class="tab-btn" onclick="switchTab('training', this)">
                 <i class="fas fa-dumbbell"></i>
                 <span>التدريب</span>
             </button>
-            <button class="tab-btn" data-tab="analysis" onclick="switchTab('analysis', this)">
+            <button class="tab-btn" onclick="switchTab('analysis', this)">
                 <i class="fas fa-chart-line"></i>
-                <span>التحليل الذكي</span>
+                <span>التحليل</span>
             </button>
-            <button class="tab-btn" data-tab="studio" onclick="switchTab('studio', this)">
-                <i class="fas fa-microphone"></i>
-                <span>الاستوديو</span>
-            </button>
-            <button class="tab-btn" data-tab="progress" onclick="switchTab('progress', this)">
+            <button class="tab-btn" onclick="switchTab('progress', this)">
                 <i class="fas fa-chart-bar"></i>
                 <span>التقدم</span>
             </button>
@@ -189,110 +593,9 @@
         <div class="tab-content">
             <!-- لوحة التحكم -->
             <div id="dashboard" class="tab-panel active">
-                <div class="dashboard-container">
-                    <!-- بطاقة الترحيب مع المساعد الذكي -->
-                    <div class="welcome-card">
-                        <div class="ai-assistant">
-                            <div class="ai-avatar">
-                                <i class="fas fa-robot"></i>
-                            </div>
-                            <div class="ai-message">
-                                <h3>مرحباً! أنا مساعدك الذكي</h3>
-                                <p id="aiWelcomeMessage">جاري تحليل ملفك الشخصي لإنشاء خطة تدريبية مخصصة...</p>
-                                <button class="btn-ai" onclick="getPersonalizedAdvice()">
-                                    <i class="fas fa-lightbulb"></i>
-                                    احصل على نصيحة ذكية
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- الإحصائيات السريعة -->
-                    <div class="stats-grid">
-                        <div class="stat-card">
-                            <div class="stat-icon clock">
-                                <i class="fas fa-clock"></i>
-                            </div>
-                            <div class="stat-info">
-                                <h3 id="totalMinutes">0</h3>
-                                <p>دقيقة تدريب</p>
-                            </div>
-                        </div>
-                        
-                        <div class="stat-card">
-                            <div class="stat-icon check">
-                                <i class="fas fa-check-circle"></i>
-                            </div>
-                            <div class="stat-info">
-                                <h3 id="completedExercises">0</h3>
-                                <p>تمرين مكتمل</p>
-                            </div>
-                        </div>
-                        
-                        <div class="stat-card">
-                            <div class="stat-icon target">
-                                <i class="fas fa-target"></i>
-                            </div>
-                            <div class="stat-info">
-                                <h3 id="accuracyScore">0%</h3>
-                                <p>دقة الأداء</p>
-                            </div>
-                        </div>
-                        
-                        <div class="stat-card">
-                            <div class="stat-icon medal">
-                                <i class="fas fa-medal"></i>
-                            </div>
-                            <div class="stat-info">
-                                <h3 id="achievementsCount">0</h3>
-                                <p>إنجاز</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- التمارين المقترحة -->
-                    <div class="recommendations-card">
-                        <h3>
-                            <i class="fas fa-magic"></i>
-                            تمارين مقترحة لك اليوم
-                        </h3>
-                        <div class="recommended-exercises" id="recommendedExercises">
-                            <!-- سيتم ملؤها بواسطة JavaScript -->
-                        </div>
-                    </div>
-
-                    <!-- التقدم اليومي -->
-                    <div class="daily-progress-card">
-                        <h3>
-                            <i class="fas fa-calendar-day"></i>
-                            تقدمك اليوم
-                        </h3>
-                        <div class="progress-ring">
-                            <svg class="progress-circle" width="120" height="120">
-                                <circle cx="60" cy="60" r="45" stroke="#e0e0e0" stroke-width="8" fill="none"/>
-                                <circle cx="60" cy="60" r="45" stroke="#4CAF50" stroke-width="8" fill="none" 
-                                        stroke-dasharray="283" stroke-dashoffset="283" class="progress-circle"/>
-                            </svg>
-                            <div class="progress-text">
-                                <span id="dailyProgressPercent">0%</span>
-                                <small>من الهدف اليومي</small>
-                            </div>
-                        </div>
-                        <div class="daily-goals">
-                            <div class="goal-item completed">
-                                <i class="fas fa-check"></i>
-                                <span>تمرين تنفس (مكتمل)</span>
-                            </div>
-                            <div class="goal-item pending">
-                                <i class="fas fa-clock"></i>
-                                <span>تمرين نطق (متبقي)</span>
-                            </div>
-                            <div class="goal-item pending">
-                                <i class="fas fa-clock"></i>
-                                <span>تسجيل صوتي (متبقي)</span>
-                            </div>
-                        </div>
-                    </div>
+                <div style="text-align: center; padding: 3rem;">
+                    <h2>مرحباً بك في أكاديمية أمريكان كوليدج!</h2>
+                    <p>ابدأ رحلتك التدريبية من قسم التدريب</p>
                 </div>
             </div>
 
@@ -368,28 +671,19 @@
                 </div>
             </div>
 
-            <!-- التحليل الذكي -->
+            <!-- التحليل -->
             <div id="analysis" class="tab-panel">
-                <div class="coming-soon">
-                    <i class="fas fa-chart-line fa-3x"></i>
+                <div style="text-align: center; padding: 3rem;">
+                    <i class="fas fa-chart-line" style="font-size: 3rem; color: #667eea; margin-bottom: 1rem;"></i>
                     <h2>التحليل الذكي</h2>
-                    <p>جاري التطوير...</p>
-                </div>
-            </div>
-
-            <!-- الاستوديو -->
-            <div id="studio" class="tab-panel">
-                <div class="coming-soon">
-                    <i class="fas fa-microphone fa-3x"></i>
-                    <h2>الاستوديو</h2>
                     <p>جاري التطوير...</p>
                 </div>
             </div>
 
             <!-- التقدم -->
             <div id="progress" class="tab-panel">
-                <div class="coming-soon">
-                    <i class="fas fa-chart-bar fa-3x"></i>
+                <div style="text-align: center; padding: 3rem;">
+                    <i class="fas fa-chart-bar" style="font-size: 3rem; color: #667eea; margin-bottom: 1rem;"></i>
                     <h2>تقرير التقدم</h2>
                     <p>جاري التطوير...</p>
                 </div>
@@ -397,251 +691,235 @@
         </div>
     </div>
 
-    <!-- النوافذ المنبثقة -->
-    <div id="modal" class="modal hidden">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal()">&times;</span>
-            <div id="modalBody"></div>
-        </div>
-    </div>
+    <!-- إشعارات -->
+    <div id="notification" class="notification"></div>
 
-    <!-- شريط الإشعارات -->
-    <div id="notificationBar" class="notification-bar hidden">
-        <div class="notification-content">
-            <i class="notification-icon"></i>
-            <span class="notification-text"></span>
-            <button class="notification-close" onclick="closeNotification()">&times;</button>
-        </div>
-    </div>
-
-    <!-- مشغل الصوت العائم -->
-    <div id="floatingPlayer" class="floating-player hidden">
-        <div class="player-info">
-            <i class="fas fa-play-circle"></i>
-            <span>جاري التشغيل...</span>
-        </div>
-        <div class="player-controls">
-            <button onclick="togglePlayPause()"><i class="fas fa-pause"></i></button>
-            <button onclick="stopAudio()"><i class="fas fa-stop"></i></button>
-        </div>
-    </div>
-
-    <!-- JavaScript محمي من الأخطاء -->
+    <!-- JavaScript مدمج بالكامل -->
     <script>
-        console.log('🎓 بدء تحميل أكاديمية أمريكان كوليدج...');
+        console.log('🎓 أكاديمية أمريكان كوليدج - النسخة البسيطة');
         
-        // متغيرات عامة
-        let appLoadingTimeout;
-        let scriptsLoaded = 0;
-        const totalScripts = 3;
+        // بيانات المستخدم
+        let currentUser = null;
         
-        // وظائف الحماية من الأخطاء
-        function handleScriptError(scriptName) {
-            console.warn(`⚠️ فشل تحميل ${scriptName}`);
-            scriptsLoaded++;
-            checkAllScriptsLoaded();
-        }
-        
-        function handleScriptLoad(scriptName) {
-            console.log(`✅ تم تحميل ${scriptName}`);
-            scriptsLoaded++;
-            checkAllScriptsLoaded();
-        }
-        
-        function checkAllScriptsLoaded() {
-            if (scriptsLoaded >= totalScripts) {
-                setTimeout(initializeApp, 1000);
-            }
-        }
-        
-        // تهيئة التطبيق
-        function initializeApp() {
-            try {
-                if (typeof VoiceAcademyApp !== 'undefined') {
-                    window.voiceAcademy = new VoiceAcademyApp();
-                    console.log('✅ تم تهيئة التطبيق بنجاح');
-                } else {
-                    console.warn('⚠️ VoiceAcademyApp غير متوفر، تهيئة أساسية...');
-                    initBasicApp();
+        // وظائف الإشعارات
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification ${type} show`;
+            
+            setTimeout(() => {
+                // محاكاة بدء التمرين
+                showNotification(`تم بدء ${exerciseName} بنجاح! 🎯`);
+                
+                // يمكن إضافة منطق التمرين هنا لاحقاً
+                console.log(`بدء تمرين: ${exerciseType}`);
+                
+                // إذا كان متاح، استخدم نظام التدريب المتقدم
+                if (window.trainingSystem && typeof window.trainingSystem.startExercise === 'function') {
+                    try {
+                        window.trainingSystem.startExercise(exerciseType);
+                    } catch (error) {
+                        console.warn('نظام التدريب المتقدم غير متوفر:', error);
+                    }
                 }
+            }, 1000);
+        }
+        
+        // تسجيل الخروج
+        function logout() {
+            if (confirm('هل تريد تسجيل الخروج؟')) {
+                currentUser = null;
+                document.getElementById('mainInterface').classList.add('hidden');
+                document.getElementById('loginSection').classList.remove('hidden');
+                document.getElementById('loginSection').classList.add('active');
+                
+                // مسح النموذج
+                document.getElementById('userName').value = '';
+                document.getElementById('userLevel').selectedIndex = 0;
+                document.getElementById('trainingGoal').selectedIndex = 0;
+                
+                showNotification('تم تسجيل الخروج بنجاح');
+            }
+        }
+        
+        // محاولة تحميل النظام المتقدم في الخلفية (اختياري)
+        function loadAdvancedSystems() {
+            try {
+                // تحميل ملفات JavaScript المتقدمة في الخلفية
+                const scripts = [
+                    'audio-processing.js',
+                    'ai-analysis.js', 
+                    'training.js',
+                    'app.js'
+                ];
+                
+                scripts.forEach((scriptSrc, index) => {
+                    setTimeout(() => {
+                        const script = document.createElement('script');
+                        script.src = scriptSrc;
+                        script.onload = () => {
+                            console.log(`✅ تم تحميل ${scriptSrc}`);
+                            if (scriptSrc === 'app.js' && typeof VoiceAcademyApp !== 'undefined') {
+                                console.log('🚀 النظام المتقدم متوفر الآن');
+                                showNotification('تم تحميل الميزات المتقدمة! 🚀');
+                            }
+                        };
+                        script.onerror = () => {
+                            console.warn(`⚠️ فشل تحميل ${scriptSrc}`);
+                        };
+                        document.head.appendChild(script);
+                    }, index * 1000); // تحميل تدريجي
+                });
             } catch (error) {
-                console.error('❌ خطأ في تهيئة التطبيق:', error);
-                initBasicApp();
+                console.warn('لا يمكن تحميل النظام المتقدم:', error);
             }
         }
         
-        // تهيئة أساسية في حالة فشل التحميل
-        function initBasicApp() {
-            console.log('🔄 تهيئة أساسية للتطبيق...');
+        // بدء تحميل النظام المتقدم بعد 3 ثوان
+        setTimeout(loadAdvancedSystems, 3000);
+        
+        // رسالة جاهزية التطبيق
+        console.log('✅ التطبيق جاهز للاستخدام!');
+        
+        // إضافة مستمعات أحداث للتحسينات
+        document.addEventListener('DOMContentLoaded', function() {
+            // تحسين تجربة المستخدم
+            const inputs = document.querySelectorAll('input, select');
+            inputs.forEach(input => {
+                input.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter' && input.id === 'userName') {
+                        startTraining();
+                    }
+                });
+            });
             
-            // إخفاء شاشة التحميل
-            const loadingScreen = document.getElementById('loadingScreen');
-            const loginSection = document.getElementById('loginSection');
-            
-            if (loadingScreen) {
-                loadingScreen.style.display = 'none';
-            }
-            if (loginSection) {
-                loginSection.classList.add('active');
-                loginSection.style.display = 'block';
-            }
+            // تحسين التفاعل مع البطاقات
+            const exerciseCards = document.querySelectorAll('.exercise-card');
+            exerciseCards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-8px) scale(1.02)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+        });
+        
+        // معالجة الأخطاء العامة
+        window.addEventListener('error', function(e) {
+            console.warn('تم التعامل مع خطأ:', e.message);
+        });
+        
+        // Service Worker للعمل بدون إنترنت (اختياري)
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js')
+                .then(() => console.log('✅ Service Worker مسجل'))
+                .catch(() => console.log('⚠️ Service Worker غير متوفر'));
+        }
+    </script>
+</body>
+</html> => {
+                notification.classList.remove('show');
+            }, 3000);
         }
         
-        // زر تخطي التحميل
-        function showSkipButton() {
-            const skipBtn = document.getElementById('skipLoading');
-            if (skipBtn) {
-                skipBtn.style.display = 'block';
-                skipBtn.onclick = initBasicApp;
-            }
-        }
-        
-        // تطبيق مؤقت لأن التحميل استغرق وقتاً طويلاً
-        appLoadingTimeout = setTimeout(showSkipButton, 10000);
-        
-        // وظائف أساسية
+        // بدء التدريب
         function startTraining() {
-            const name = document.getElementById('userName')?.value?.trim();
+            const name = document.getElementById('userName').value.trim();
+            const level = document.getElementById('userLevel').value;
+            const goal = document.getElementById('trainingGoal').value;
+            
             if (!name) {
-                alert('يرجى إدخال اسمك أولاً');
+                showNotification('يرجى إدخال اسمك الكامل', 'error');
                 return;
             }
             
-            if (window.voiceAcademy && typeof window.voiceAcademy.startTraining === 'function') {
-                window.voiceAcademy.startTraining();
-            } else {
-                // تطبيق أساسي
-                document.getElementById('loginSection').style.display = 'none';
-                document.getElementById('mainInterface').classList.remove('hidden');
-                alert(`مرحباً ${name}! تم تسجيل دخولك بنجاح`);
+            if (name.length < 2) {
+                showNotification('الاسم قصير جداً (حرفين على الأقل)', 'error');
+                return;
             }
+            
+            // إنشاء المستخدم
+            currentUser = {
+                name: name,
+                level: level,
+                goal: goal,
+                joinDate: new Date().toISOString()
+            };
+            
+            // الانتقال للواجهة الرئيسية
+            document.getElementById('loginSection').classList.remove('active');
+            document.getElementById('loginSection').classList.add('hidden');
+            document.getElementById('mainInterface').classList.remove('hidden');
+            
+            // تحديث الترحيب
+            document.getElementById('userWelcome').textContent = `مرحباً ${name}`;
+            
+            showNotification(`مرحباً بك ${name} في أكاديمية أمريكان كوليدج! 🎉`);
         }
         
+        // تحميل ملف موجود
         function loadExistingProfile() {
-            alert('ميزة تحميل الملف الشخصي ستتوفر قريباً');
+            showNotification('ميزة تحميل الملف الشخصي ستتوفر قريباً');
         }
         
+        // عرض توضيحي
         function startDemo() {
-            if (window.voiceAcademy && typeof window.voiceAcademy.startDemo === 'function') {
-                window.voiceAcademy.startDemo();
-            } else {
-                document.getElementById('loginSection').style.display = 'none';
-                document.getElementById('mainInterface').classList.remove('hidden');
-                alert('مرحباً بك في العرض التوضيحي!');
-            }
+            currentUser = {
+                name: 'مستخدم تجريبي',
+                level: 'intermediate',
+                goal: 'general',
+                joinDate: new Date().toISOString()
+            };
+            
+            document.getElementById('loginSection').classList.remove('active');
+            document.getElementById('loginSection').classList.add('hidden');
+            document.getElementById('mainInterface').classList.remove('hidden');
+            
+            document.getElementById('userWelcome').textContent = 'مرحباً مستخدم تجريبي';
+            
+            showNotification('مرحباً بك في العرض التوضيحي! 🎬');
         }
         
+        // التبديل بين التبويبات
         function switchTab(tabName, element) {
-            if (window.voiceAcademy && typeof window.voiceAcademy.switchTab === 'function') {
-                window.voiceAcademy.switchTab(tabName, element);
-            } else {
-                // تطبيق أساسي
-                document.querySelectorAll('.tab-panel').forEach(panel => {
-                    panel.classList.remove('active');
-                });
-                document.querySelectorAll('.tab-btn').forEach(btn => {
-                    btn.classList.remove('active');
-                });
-                
-                const targetPanel = document.getElementById(tabName);
-                if (targetPanel) targetPanel.classList.add('active');
-                if (element) element.classList.add('active');
+            // إخفاء جميع التبويبات
+            document.querySelectorAll('.tab-panel').forEach(panel => {
+                panel.classList.remove('active');
+            });
+            
+            // إزالة التحديد من جميع الأزرار
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // إظهار التبويب المحدد
+            const targetPanel = document.getElementById(tabName);
+            if (targetPanel) {
+                targetPanel.classList.add('active');
             }
+            
+            // تحديد الزر
+            if (element) {
+                element.classList.add('active');
+            }
+            
+            console.log(`تم التبديل إلى: ${tabName}`);
         }
         
+        // بدء التمرين
         function startExercise(exerciseType) {
-            if (window.trainingSystem && typeof window.trainingSystem.startExercise === 'function') {
-                window.trainingSystem.startExercise(exerciseType);
-            } else {
-                alert(`تمرين ${exerciseType} سيبدأ قريباً! نظام التدريب قيد التحميل.`);
-            }
-        }
-        
-        function getPersonalizedAdvice() {
-            if (window.voiceAcademy && typeof window.voiceAcademy.getPersonalizedAdvice === 'function') {
-                window.voiceAcademy.getPersonalizedAdvice();
-            } else {
-                alert('نصيحة ذكية: ابدأ بتمارين التنفس للحصول على أساس قوي!');
-            }
-        }
-        
-        function closeModal() {
-            const modal = document.getElementById('modal');
-            if (modal) modal.classList.add('hidden');
-        }
-        
-        function closeNotification() {
-            const notification = document.getElementById('notificationBar');
-            if (notification) notification.classList.add('hidden');
-        }
-        
-        function showNotifications() {
-            alert('الإشعارات: لديك 3 إشعارات جديدة!');
-        }
-        
-        function showProfile() {
-            alert('الملف الشخصي: قريباً!');
-        }
-        
-        function logout() {
-            if (confirm('هل تريد تسجيل الخروج؟')) {
-                location.reload();
-            }
-        }
-        
-        function togglePlayPause() {
-            console.log('⏯️ تشغيل/إيقاف');
-        }
-        
-        function stopAudio() {
-            const player = document.getElementById('floatingPlayer');
-            if (player) player.classList.add('hidden');
-        }
-    </script>
-    
-    <!-- تحميل ملفات JavaScript مع حماية من الأخطاء -->
-    <script>
-        // تحميل audio-processing.js
-        (function() {
-            const script = document.createElement('script');
-            script.src = 'audio-processing.js';
-            script.onload = () => handleScriptLoad('audio-processing.js');
-            script.onerror = () => handleScriptError('audio-processing.js');
-            document.head.appendChild(script);
-        })();
-        
-        // تحميل ai-analysis.js
-        (function() {
-            const script = document.createElement('script');
-            script.src = 'ai-analysis.js';
-            script.onload = () => handleScriptLoad('ai-analysis.js');
-            script.onerror = () => handleScriptError('ai-analysis.js');
-            document.head.appendChild(script);
-        })();
-        
-        // تحميل training.js
-        (function() {
-            const script = document.createElement('script');
-            script.src = 'training.js';
-            script.onload = () => handleScriptLoad('training.js');
-            script.onerror = () => handleScriptError('training.js');
-            document.head.appendChild(script);
-        })();
-        
-        // تحميل app.js أخيراً
-        setTimeout(() => {
-            const script = document.createElement('script');
-            script.src = 'app.js';
-            script.onload = () => {
-                handleScriptLoad('app.js');
-                clearTimeout(appLoadingTimeout);
+            const exerciseNames = {
+                breathing: 'تمرين التنفس العميق',
+                pronunciation: 'تمرين النطق المتقدم',
+                expression: 'تمرين التعبير العاطفي',
+                confidence: 'تمرين بناء الثقة',
+                advanced: 'التحدي المتقدم'
             };
-            script.onerror = () => {
-                handleScriptError('app.js');
-                clearTimeout(appLoadingTimeout);
-            };
-            document.head.appendChild(script);
-        }, 1000);
-    </script>
-</body>
-</html>
+            
+            const exerciseName = exerciseNames[exerciseType] || 'تمرين تدريبي';
+            
+            showNotification(`جاري تحضير: ${exerciseName}...`);
+            
+            setTimeout(()
