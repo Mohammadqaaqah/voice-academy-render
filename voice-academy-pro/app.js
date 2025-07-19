@@ -1,6 +1,6 @@
 /**
  * ========================================
- * أكاديمية الإعلام الاحترافية - الملف الرئيسي
+ * أكاديمية امريكان كوليدج الاحترافية - الملف الرئيسي
  * مدعوم بالذكاء الاصطناعي
  * ========================================
  */
@@ -12,7 +12,7 @@ let appSettings = {
     version: '2.0.0',
     environment: 'production',
     apiUrl: 'https://api.voice-academy.com',
-    debug: false
+    debug: true
 };
 
 /**
@@ -29,168 +29,47 @@ class VoiceAcademyApp {
         this.trainingSession = null;
         this.notifications = [];
         
-        // تهيئة البيانات الافتراضية لتجنب الأخطاء
+        // تهيئة البيانات الافتراضية
         this.userData = {
             statistics: {
                 totalRecordings: 0,
                 totalDuration: 0,
                 averageScore: 0,
-                dailyProgress: 0,
-                weeklyProgress: 0,
-                monthlyProgress: 0,
-                completedLessons: 0,
+                dailyProgress: 25, // تقدم افتراضي للعرض
+                weeklyProgress: 60,
+                monthlyProgress: 45,
+                completedLessons: 3,
                 totalLessons: 10,
-                streakDays: 0,
+                streakDays: 5,
                 lastActivity: new Date().toISOString(),
-                exercisesCompleted: 0,
-                recordingsAnalyzed: 0,
-                averageAccuracy: 0,
-                improvementRate: 0,
-                totalSessions: 0,
+                exercisesCompleted: 8,
+                recordingsAnalyzed: 12,
+                averageAccuracy: 78,
+                improvementRate: 15,
+                totalSessions: 20,
                 bestScores: {
-                    breathing: 0,
-                    pronunciation: 0,
-                    expression: 0,
-                    confidence: 0
+                    breathing: 85,
+                    pronunciation: 72,
+                    expression: 68,
+                    confidence: 75
                 }
             },
             settings: {
                 language: 'ar',
-                theme: 'dark',
+                theme: 'light',
                 notifications: true,
                 autoSave: true
             },
             progress: {
-                currentLevel: 1,
-                experience: 0,
-                achievements: [],
-                completedCourses: []
+                currentLevel: 2,
+                experience: 1250,
+                achievements: ['first_recording', 'week_streak'],
+                completedCourses: ['basic_breathing']
             }
         };
         
         // تهيئة التطبيق
         this.init();
-    }
-
-    /**
-     * تهيئة التطبيق
-     */
-    async init() {
-        try {
-            this.log('🚀 بدء تحميل أكاديمية الإعلام الاحترافية...');
-            
-            // عرض شاشة التحميل
-            this.showLoadingScreen();
-            
-            // تحميل المكونات
-            await this.loadComponents();
-            
-            // إعداد أحداث التطبيق
-            this.setupEventListeners();
-            
-            // تهيئة الصوت
-            await this.initializeAudio();
-            
-            // تهيئة نظام التدريب
-            await this.initializeTrainingSystem();
-            
-            // تحميل بيانات المستخدم المحفوظة
-            await this.loadSavedUserData();
-            
-            // إخفاء شاشة التحميل
-            this.hideLoadingScreen();
-            
-            this.log('✅ تم تحميل التطبيق بنجاح!');
-            
-        } catch (error) {
-            this.error('❌ خطأ في تهيئة التطبيق:', error);
-            this.showNotification('حدث خطأ في تحميل التطبيق', 'error');
-        }
-    }
-
-    /**
-     * تهيئة نظام التدريب
-     */
-    async initializeTrainingSystem() {
-        try {
-            if (typeof window.initializeTrainingSystem === 'function') {
-                await window.initializeTrainingSystem();
-                this.log('🏋️ تم تهيئة نظام التدريب بنجاح');
-            } else {
-                this.warn('⚠️ نظام التدريب غير متوفر');
-            }
-        } catch (error) {
-            this.error('❌ خطأ في تهيئة نظام التدريب:', error);
-        }
-    }
-
-    /**
-     * عرض شاشة التحميل
-     */
-    showLoadingScreen() {
-        const loadingTexts = [
-            'جاري تحميل النظام...',
-            'تهيئة محرك الذكاء الاصطناعي...',
-            'إعداد معالج الصوت...',
-            'تحميل النماذج التدريبية...',
-            'تحضير الواجهات...',
-            'كل شيء جاهز!'
-        ];
-
-        let currentIndex = 0;
-        const loadingText = document.getElementById('loadingText');
-        const progressBar = document.getElementById('loadingProgress');
-        
-        if (!loadingText || !progressBar) {
-            this.warn('⚠️ عناصر شاشة التحميل غير موجودة');
-            return;
-        }
-        
-        const updateProgress = () => {
-            if (currentIndex < loadingTexts.length) {
-                loadingText.textContent = loadingTexts[currentIndex];
-                const progress = ((currentIndex + 1) / loadingTexts.length) * 100;
-                progressBar.style.width = `${progress}%`;
-                currentIndex++;
-                
-                setTimeout(updateProgress, 500);
-            }
-        };
-        
-        updateProgress();
-    }
-
-    /**
-     * إخفاء شاشة التحميل
-     */
-    hideLoadingScreen() {
-        setTimeout(() => {
-            const loadingScreen = document.getElementById('loadingScreen');
-            const loginSection = document.getElementById('loginSection');
-            
-            if (loadingScreen) {
-                loadingScreen.classList.add('hidden');
-                
-                setTimeout(() => {
-                    loadingScreen.style.display = 'none';
-                    if (loginSection) {
-                        loginSection.classList.add('active');
-                    }
-                }, 500);
-            }
-        }, 3000);
-    }
-
-    /**
-     * تحميل المكونات
-     */
-    async loadComponents() {
-        return new Promise(resolve => {
-            setTimeout(() => {
-                this.log('📦 تم تحميل جميع المكونات');
-                resolve();
-            }, 1500);
-        });
     }
 
     /**
@@ -324,7 +203,7 @@ class VoiceAcademyApp {
 
             // إنشاء ملف المستخدم الجديد
             this.currentUser = this.createNewUser(name, level, goal);
-            this.userData = this.currentUser; // ربط البيانات
+            this.userData = this.currentUser;
             
             // حفظ البيانات
             await this.saveUserData();
@@ -396,10 +275,10 @@ class VoiceAcademyApp {
             
             // المهارات (من 0 إلى 100)
             skills: {
-                breathing: 0,
-                pronunciation: 0,
-                expression: 0,
-                confidence: 0
+                breathing: 15,
+                pronunciation: 20,
+                expression: 10,
+                confidence: 25
             },
             
             // الإحصائيات
@@ -477,7 +356,7 @@ class VoiceAcademyApp {
                     
                     if (this.validateUserData(userData)) {
                         this.currentUser = userData;
-                        this.userData = userData; // ربط البيانات
+                        this.userData = userData;
                         this.showMainInterface();
                         this.updateAllUI();
                         this.showNotification('تم تحميل الملف الشخصي بنجاح', 'success');
@@ -508,7 +387,7 @@ class VoiceAcademyApp {
      */
     startDemo() {
         this.currentUser = this.createDemoUser();
-        this.userData = this.currentUser; // ربط البيانات
+        this.userData = this.currentUser;
         this.showMainInterface();
         this.updateAllUI();
         this.showNotification('مرحباً بك في العرض التوضيحي! 🎬', 'info');
@@ -536,6 +415,7 @@ class VoiceAcademyApp {
         demoUser.statistics.recordingsAnalyzed = 10;
         demoUser.statistics.averageAccuracy = 78;
         demoUser.statistics.improvementRate = 12;
+        demoUser.statistics.dailyProgress = 65;
         
         return demoUser;
     }
@@ -631,40 +511,8 @@ class VoiceAcademyApp {
         ];
         
         return {
-            welcome: personalizedMessages[Math.floor(Math.random() * personalizedMessages.length)],
-            tip: this.generateDailyTip(),
-            motivation: this.generateMotivation()
+            welcome: personalizedMessages[Math.floor(Math.random() * personalizedMessages.length)]
         };
-    }
-
-    /**
-     * توليد نصيحة يومية
-     */
-    generateDailyTip() {
-        const tips = [
-            'اشرب كوباً من الماء الدافئ قبل التدريب لترطيب الحبال الصوتية',
-            'تذكر أن الممارسة المنتظمة أهم من المدة الطويلة',
-            'استمع لتسجيلاتك السابقة لتلاحظ التطور',
-            'تدرب في مكان هادئ وخالٍ من الضوضاء',
-            'استخدم تقنيات التنفس العميق قبل كل تمرين'
-        ];
-        
-        return tips[Math.floor(Math.random() * tips.length)];
-    }
-
-    /**
-     * توليد رسالة تحفيزية
-     */
-    generateMotivation() {
-        const level = this.currentUser.profile.currentLevel;
-        
-        if (level === 1) {
-            return 'رحلة الألف ميل تبدأ بخطوة واحدة، وأنت بدأت بالفعل! 🌟';
-        } else if (level < 3) {
-            return 'تقدمك رائع! استمر في هذا المعدل وستصل لأهدافك قريباً 🚀';
-        } else {
-            return 'أنت تتطور بشكل ممتاز! مهاراتك أصبحت أكثر احترافية 🏆';
-        }
     }
 
     /**
@@ -755,6 +603,19 @@ class VoiceAcademyApp {
             });
         }
         
+        // إضافة توصيات افتراضية إذا لم توجد
+        if (recommendations.length === 0) {
+            recommendations.push({
+                type: 'breathing',
+                title: 'تمرين التنفس الأساسي',
+                description: 'ابدأ بالأساسيات لبناء قاعدة قوية',
+                icon: 'fa-lungs',
+                difficulty: 'easy',
+                difficultyText: 'سهل',
+                estimatedTime: 10
+            });
+        }
+        
         return recommendations.slice(0, 3);
     }
 
@@ -765,7 +626,7 @@ class VoiceAcademyApp {
         try {
             const progress = this.calculateDailyProgress();
             const circle = document.querySelector('.progress-circle');
-            const text = document.querySelector('.progress-text');
+            const text = document.querySelector('#dailyProgressPercent');
             
             if (!circle || !text) {
                 this.warn('⚠️ عناصر دائرة التقدم غير موجودة');
@@ -790,22 +651,10 @@ class VoiceAcademyApp {
     calculateDailyProgress() {
         try {
             if (!this.userData || !this.userData.statistics) {
-                this.warn('⚠️ بيانات المستخدم غير متوفرة');
                 return 0;
             }
             
-            const stats = this.userData.statistics;
-            const today = new Date().toDateString();
-            const lastActivity = new Date(stats.lastActivity).toDateString();
-            
-            // إذا كان اليوم جديد، اعتبر التقدم 0
-            if (today !== lastActivity) {
-                stats.dailyProgress = 0;
-                stats.lastActivity = new Date().toISOString();
-                this.saveUserData();
-            }
-            
-            return stats.dailyProgress || 0;
+            return this.userData.statistics.dailyProgress || 0;
         } catch (error) {
             this.error('❌ خطأ في حساب التقدم اليومي:', error);
             return 0;
@@ -904,7 +753,7 @@ class VoiceAcademyApp {
     }
 
     /**
-     * بدء تمرين مقترح - محدث مع نظام التدريب
+     * بدء تمرين مقترح
      */
     startRecommendedExercise(type) {
         try {
@@ -917,15 +766,13 @@ class VoiceAcademyApp {
                 window.startTrainingExercise(type);
             } else {
                 // إذا لم يكن النظام متوفراً، تهيئته أولاً
-                this.initializeTrainingSystem().then(() => {
+                setTimeout(() => {
                     if (window.trainingSystem) {
                         window.trainingSystem.startExercise(type);
                     } else {
                         this.fallbackExerciseStart(type);
                     }
-                }).catch(() => {
-                    this.fallbackExerciseStart(type);
-                });
+                }, 1000);
             }
             
             // تحديث الإحصائيات
@@ -987,6 +834,18 @@ class VoiceAcademyApp {
      * توليد نصيحة مخصصة
      */
     generatePersonalizedAdvice() {
+        if (!this.currentUser || !this.currentUser.skills) {
+            return {
+                main: 'مرحباً بك في أكاديمية الإعلام! ابدأ رحلتك التدريبية اليوم.',
+                steps: [
+                    'ابدأ بتمارين التنفس الأساسية',
+                    'تدرب يومياً لمدة 10-15 دقيقة',
+                    'سجل نفسك واستمع للتسجيلات'
+                ],
+                prediction: 'مع التدريب المستمر، ستشعر بالتحسن خلال أسبوعين.'
+            };
+        }
+
         const weakestSkill = Object.keys(this.currentUser.skills).reduce((a, b) => 
             this.currentUser.skills[a] < this.currentUser.skills[b] ? a : b
         );
@@ -1367,3 +1226,133 @@ document.addEventListener('DOMContentLoaded', function() {
 // تصدير للنطاق العام
 window.VoiceAcademyApp = VoiceAcademyApp;
 window.voiceAcademy = voiceAcademy;
+     * تهيئة التطبيق
+     */
+    async init() {
+        try {
+            this.log('🚀 بدء تحميل أكاديمية الإعلام الاحترافية...');
+            
+            // عرض شاشة التحميل
+            this.showLoadingScreen();
+            
+            // تحميل المكونات
+            await this.loadComponents();
+            
+            // إعداد أحداث التطبيق
+            this.setupEventListeners();
+            
+            // تهيئة الصوت
+            await this.initializeAudio();
+            
+            // تهيئة نظام التدريب
+            await this.initializeTrainingSystem();
+            
+            // تحميل بيانات المستخدم المحفوظة
+            await this.loadSavedUserData();
+            
+            // إخفاء شاشة التحميل
+            this.hideLoadingScreen();
+            
+            this.log('✅ تم تحميل التطبيق بنجاح!');
+            
+        } catch (error) {
+            this.error('❌ خطأ في تهيئة التطبيق:', error);
+            this.showNotification('حدث خطأ في تحميل التطبيق', 'error');
+        }
+    }
+
+    /**
+     * تهيئة نظام التدريب
+     */
+    async initializeTrainingSystem() {
+        try {
+            // انتظار تحميل ملف training.js
+            let attempts = 0;
+            const maxAttempts = 10;
+            
+            while (!window.TrainingSystem && attempts < maxAttempts) {
+                await new Promise(resolve => setTimeout(resolve, 500));
+                attempts++;
+            }
+            
+            if (window.TrainingSystem) {
+                await window.initializeTrainingSystem();
+                this.log('🏋️ تم تهيئة نظام التدريب بنجاح');
+            } else {
+                this.warn('⚠️ نظام التدريب غير متوفر بعد');
+            }
+        } catch (error) {
+            this.error('❌ خطأ في تهيئة نظام التدريب:', error);
+        }
+    }
+
+    /**
+     * عرض شاشة التحميل
+     */
+    showLoadingScreen() {
+        const loadingTexts = [
+            'جاري تحميل النظام...',
+            'تهيئة محرك الذكاء الاصطناعي...',
+            'إعداد معالج الصوت...',
+            'تحميل النماذج التدريبية...',
+            'تحضير الواجهات...',
+            'كل شيء جاهز!'
+        ];
+
+        let currentIndex = 0;
+        const loadingText = document.getElementById('loadingText');
+        const progressBar = document.getElementById('loadingProgress');
+        
+        if (!loadingText || !progressBar) {
+            this.warn('⚠️ عناصر شاشة التحميل غير موجودة');
+            return;
+        }
+        
+        const updateProgress = () => {
+            if (currentIndex < loadingTexts.length) {
+                loadingText.textContent = loadingTexts[currentIndex];
+                const progress = ((currentIndex + 1) / loadingTexts.length) * 100;
+                progressBar.style.width = `${progress}%`;
+                currentIndex++;
+                
+                setTimeout(updateProgress, 500);
+            }
+        };
+        
+        updateProgress();
+    }
+
+    /**
+     * إخفاء شاشة التحميل
+     */
+    hideLoadingScreen() {
+        setTimeout(() => {
+            const loadingScreen = document.getElementById('loadingScreen');
+            const loginSection = document.getElementById('loginSection');
+            
+            if (loadingScreen) {
+                loadingScreen.classList.add('hidden');
+                
+                setTimeout(() => {
+                    loadingScreen.style.display = 'none';
+                    if (loginSection) {
+                        loginSection.classList.add('active');
+                    }
+                }, 500);
+            }
+        }, 3000);
+    }
+
+    /**
+     * تحميل المكونات
+     */
+    async loadComponents() {
+        return new Promise(resolve => {
+            setTimeout(() => {
+                this.log('📦 تم تحميل جميع المكونات');
+                resolve();
+            }, 1500);
+        });
+    }
+
+    /**
