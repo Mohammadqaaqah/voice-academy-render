@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🎙️ أكاديمية امريكان كوليدج الاحترافية</title>
+    <title>🎙️ أكاديمية أمريكان كوليدج</title>
     
     <!-- الخطوط والأيقونات -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
@@ -15,16 +15,15 @@
     <link rel="stylesheet" href="styles.css">
     
     <!-- Meta Tags للمشاركة -->
-    <meta property="og:title" content="أكاديمية امريكان كوليدج الاحترافية">
+    <meta property="og:title" content="أكاديمية أمريكان كوليدج">
     <meta property="og:description" content="منصة تدريب متقدمة مدعومة بالذكاء الاصطناعي لتطوير المهارات الصوتية والإلقاء">
-    <meta property="og:image" content="https://via.placeholder.com/1200x630/667eea/ffffff?text=🎙️+أكاديمية+امريكان كوليدج">
+    <meta property="og:image" content="https://via.placeholder.com/1200x630/667eea/ffffff?text=🎙️+أكاديمية+أمريكان+كوليدج">
     <meta property="og:url" content="https://voice-academy-pro.onrender.com">
     <meta name="twitter:card" content="summary_large_image">
     
     <!-- PWA Meta -->
     <meta name="theme-color" content="#667eea">
     <link rel="manifest" href="manifest.json">
-    <link rel="apple-touch-icon" href="icon-192.png">
 </head>
 <body>
     <!-- شاشة التحميل -->
@@ -33,12 +32,16 @@
             <div class="ai-logo">
                 <i class="fas fa-brain fa-pulse"></i>
             </div>
-            <h2>🎙️ أ الإعلام الاحترافية</h2>
+            <h2>🎙️ أكاديمية أمريكان كوليدج</h2>
             <p>مدعوم بالذكاء الاصطناعي</p>
             <div class="loading-bar">
                 <div class="loading-progress" id="loadingProgress"></div>
             </div>
             <p id="loadingText">جاري تحميل النظام...</p>
+            <!-- زر للمتابعة في حالة التوقف -->
+            <button id="skipLoading" style="display: none; margin-top: 20px; padding: 10px 20px; background: white; color: #667eea; border: none; border-radius: 5px; cursor: pointer;">
+                تخطي والمتابعة
+            </button>
         </div>
     </div>
 
@@ -50,7 +53,7 @@
                     <div class="logo">
                         <i class="fas fa-microphone-alt"></i>
                     </div>
-                    <h1>أكاديمية امريكان كوليدج الاحترافية</h1>
+                    <h1>أكاديمية أمريكان كوليدج</h1>
                     <p>منصة تدريب متطورة مدعومة بالذكاء الاصطناعي</p>
                 </div>
                 
@@ -423,38 +426,160 @@
         </div>
     </div>
 
-    <!-- ملفات JavaScript بالترتيب الصحيح -->
-    <script src="audio-processing.js"></script>
-    <script src="ai-analysis.js"></script>
-    <script src="training.js"></script>
-    <script src="app.js"></script>
-    
-    <!-- تهيئة التطبيق -->
+    <!-- JavaScript محمي من الأخطاء -->
     <script>
-        console.log('🎓 أكاديمية امريكان كوليدج الاحترافية - جاري التحميل...');
+        console.log('🎓 بدء تحميل أكاديمية أمريكان كوليدج...');
         
-        // وظيفة بدء التمرين
-        function startExercise(exerciseType) {
-            console.log('🎯 طلب بدء تمرين:', exerciseType);
-            
-            if (window.trainingSystem) {
-                window.trainingSystem.startExercise(exerciseType);
-            } else if (window.voiceAcademy) {
-                window.voiceAcademy.startRecommendedExercise(exerciseType);
-            } else {
-                console.error('❌ نظام التدريب غير متوفر');
-                alert('نظام التدريب قيد التحميل، يرجى المحاولة خلال لحظات');
+        // متغيرات عامة
+        let appLoadingTimeout;
+        let scriptsLoaded = 0;
+        const totalScripts = 3;
+        
+        // وظائف الحماية من الأخطاء
+        function handleScriptError(scriptName) {
+            console.warn(`⚠️ فشل تحميل ${scriptName}`);
+            scriptsLoaded++;
+            checkAllScriptsLoaded();
+        }
+        
+        function handleScriptLoad(scriptName) {
+            console.log(`✅ تم تحميل ${scriptName}`);
+            scriptsLoaded++;
+            checkAllScriptsLoaded();
+        }
+        
+        function checkAllScriptsLoaded() {
+            if (scriptsLoaded >= totalScripts) {
+                setTimeout(initializeApp, 1000);
             }
         }
         
+        // تهيئة التطبيق
+        function initializeApp() {
+            try {
+                if (typeof VoiceAcademyApp !== 'undefined') {
+                    window.voiceAcademy = new VoiceAcademyApp();
+                    console.log('✅ تم تهيئة التطبيق بنجاح');
+                } else {
+                    console.warn('⚠️ VoiceAcademyApp غير متوفر، تهيئة أساسية...');
+                    initBasicApp();
+                }
+            } catch (error) {
+                console.error('❌ خطأ في تهيئة التطبيق:', error);
+                initBasicApp();
+            }
+        }
+        
+        // تهيئة أساسية في حالة فشل التحميل
+        function initBasicApp() {
+            console.log('🔄 تهيئة أساسية للتطبيق...');
+            
+            // إخفاء شاشة التحميل
+            const loadingScreen = document.getElementById('loadingScreen');
+            const loginSection = document.getElementById('loginSection');
+            
+            if (loadingScreen) {
+                loadingScreen.style.display = 'none';
+            }
+            if (loginSection) {
+                loginSection.classList.add('active');
+                loginSection.style.display = 'block';
+            }
+        }
+        
+        // زر تخطي التحميل
+        function showSkipButton() {
+            const skipBtn = document.getElementById('skipLoading');
+            if (skipBtn) {
+                skipBtn.style.display = 'block';
+                skipBtn.onclick = initBasicApp;
+            }
+        }
+        
+        // تطبيق مؤقت لأن التحميل استغرق وقتاً طويلاً
+        appLoadingTimeout = setTimeout(showSkipButton, 10000);
+        
         // وظائف أساسية
+        function startTraining() {
+            const name = document.getElementById('userName')?.value?.trim();
+            if (!name) {
+                alert('يرجى إدخال اسمك أولاً');
+                return;
+            }
+            
+            if (window.voiceAcademy && typeof window.voiceAcademy.startTraining === 'function') {
+                window.voiceAcademy.startTraining();
+            } else {
+                // تطبيق أساسي
+                document.getElementById('loginSection').style.display = 'none';
+                document.getElementById('mainInterface').classList.remove('hidden');
+                alert(`مرحباً ${name}! تم تسجيل دخولك بنجاح`);
+            }
+        }
+        
+        function loadExistingProfile() {
+            alert('ميزة تحميل الملف الشخصي ستتوفر قريباً');
+        }
+        
+        function startDemo() {
+            if (window.voiceAcademy && typeof window.voiceAcademy.startDemo === 'function') {
+                window.voiceAcademy.startDemo();
+            } else {
+                document.getElementById('loginSection').style.display = 'none';
+                document.getElementById('mainInterface').classList.remove('hidden');
+                alert('مرحباً بك في العرض التوضيحي!');
+            }
+        }
+        
+        function switchTab(tabName, element) {
+            if (window.voiceAcademy && typeof window.voiceAcademy.switchTab === 'function') {
+                window.voiceAcademy.switchTab(tabName, element);
+            } else {
+                // تطبيق أساسي
+                document.querySelectorAll('.tab-panel').forEach(panel => {
+                    panel.classList.remove('active');
+                });
+                document.querySelectorAll('.tab-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                
+                const targetPanel = document.getElementById(tabName);
+                if (targetPanel) targetPanel.classList.add('active');
+                if (element) element.classList.add('active');
+            }
+        }
+        
+        function startExercise(exerciseType) {
+            if (window.trainingSystem && typeof window.trainingSystem.startExercise === 'function') {
+                window.trainingSystem.startExercise(exerciseType);
+            } else {
+                alert(`تمرين ${exerciseType} سيبدأ قريباً! نظام التدريب قيد التحميل.`);
+            }
+        }
+        
+        function getPersonalizedAdvice() {
+            if (window.voiceAcademy && typeof window.voiceAcademy.getPersonalizedAdvice === 'function') {
+                window.voiceAcademy.getPersonalizedAdvice();
+            } else {
+                alert('نصيحة ذكية: ابدأ بتمارين التنفس للحصول على أساس قوي!');
+            }
+        }
+        
+        function closeModal() {
+            const modal = document.getElementById('modal');
+            if (modal) modal.classList.add('hidden');
+        }
+        
+        function closeNotification() {
+            const notification = document.getElementById('notificationBar');
+            if (notification) notification.classList.add('hidden');
+        }
+        
         function showNotifications() {
-            console.log('📢 عرض الإشعارات');
             alert('الإشعارات: لديك 3 إشعارات جديدة!');
         }
         
         function showProfile() {
-            console.log('👤 عرض الملف الشخصي');
             alert('الملف الشخصي: قريباً!');
         }
         
@@ -469,12 +594,54 @@
         }
         
         function stopAudio() {
-            console.log('⏹️ إيقاف الصوت');
             const player = document.getElementById('floatingPlayer');
-            if (player) {
-                player.classList.add('hidden');
-            }
+            if (player) player.classList.add('hidden');
         }
+    </script>
+    
+    <!-- تحميل ملفات JavaScript مع حماية من الأخطاء -->
+    <script>
+        // تحميل audio-processing.js
+        (function() {
+            const script = document.createElement('script');
+            script.src = 'audio-processing.js';
+            script.onload = () => handleScriptLoad('audio-processing.js');
+            script.onerror = () => handleScriptError('audio-processing.js');
+            document.head.appendChild(script);
+        })();
+        
+        // تحميل ai-analysis.js
+        (function() {
+            const script = document.createElement('script');
+            script.src = 'ai-analysis.js';
+            script.onload = () => handleScriptLoad('ai-analysis.js');
+            script.onerror = () => handleScriptError('ai-analysis.js');
+            document.head.appendChild(script);
+        })();
+        
+        // تحميل training.js
+        (function() {
+            const script = document.createElement('script');
+            script.src = 'training.js';
+            script.onload = () => handleScriptLoad('training.js');
+            script.onerror = () => handleScriptError('training.js');
+            document.head.appendChild(script);
+        })();
+        
+        // تحميل app.js أخيراً
+        setTimeout(() => {
+            const script = document.createElement('script');
+            script.src = 'app.js';
+            script.onload = () => {
+                handleScriptLoad('app.js');
+                clearTimeout(appLoadingTimeout);
+            };
+            script.onerror = () => {
+                handleScriptError('app.js');
+                clearTimeout(appLoadingTimeout);
+            };
+            document.head.appendChild(script);
+        }, 1000);
     </script>
 </body>
 </html>
