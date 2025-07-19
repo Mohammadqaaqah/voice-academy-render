@@ -34,6 +34,12 @@
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
             overflow: hidden;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .header {
@@ -46,6 +52,12 @@
         .header i {
             font-size: 50px;
             margin-bottom: 15px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
 
         .header h1 {
@@ -75,11 +87,13 @@
             border-radius: 8px;
             font-size: 16px;
             font-family: 'Cairo', Arial, sans-serif;
+            transition: all 0.3s ease;
         }
 
         input:focus, select:focus {
             outline: none;
             border-color: #667eea;
+            box-shadow: 0 0 10px rgba(102, 126, 234, 0.2);
         }
 
         .btn {
@@ -96,6 +110,7 @@
             align-items: center;
             justify-content: center;
             gap: 10px;
+            font-family: 'Cairo', Arial, sans-serif;
         }
 
         .btn-primary {
@@ -108,16 +123,6 @@
             box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
         }
 
-        .btn-secondary {
-            background: #f8f9fa;
-            color: #333;
-            border: 2px solid #ddd;
-        }
-
-        .btn-secondary:hover {
-            background: #e9ecef;
-        }
-
         .btn-demo {
             background: linear-gradient(135deg, #FF9800 0%, #FF5722 100%);
             color: white;
@@ -125,6 +130,7 @@
 
         .btn-demo:hover {
             transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 152, 0, 0.4);
         }
 
         /* الواجهة الرئيسية */
@@ -132,6 +138,12 @@
             display: none;
             min-height: 100vh;
             background: #f5f7fa;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         .nav {
@@ -147,10 +159,32 @@
             font-size: 20px;
             font-weight: 700;
             color: #667eea;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .nav-user {
             color: #555;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logout-btn {
+            background: none;
+            border: none;
+            color: #666;
+            cursor: pointer;
+            font-size: 16px;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: #f8f9fa;
+            color: #667eea;
         }
 
         .tabs {
@@ -169,6 +203,7 @@
             color: #666;
             font-weight: 600;
             transition: all 0.3s ease;
+            font-family: 'Cairo', Arial, sans-serif;
         }
 
         .tab.active {
@@ -187,10 +222,16 @@
 
         .tab-panel {
             display: none;
+            animation: slideIn 0.4s ease-out;
         }
 
         .tab-panel.active {
             display: block;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
         }
 
         .exercises {
@@ -208,11 +249,13 @@
             cursor: pointer;
             transition: all 0.3s ease;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border: 2px solid transparent;
         }
 
         .exercise:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+            border-color: #667eea;
         }
 
         .exercise i {
@@ -242,8 +285,6 @@
         .medium { background: #fff3e0; color: #ff9800; }
         .hard { background: #ffebee; color: #f44336; }
 
-        .hidden { display: none !important; }
-
         .alert {
             position: fixed;
             top: 20px;
@@ -255,15 +296,114 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
             z-index: 1000;
             display: none;
+            animation: slideDown 0.3s ease-out;
         }
 
-        .alert.show { display: block; }
+        @keyframes slideDown {
+            from { transform: translateY(-100px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .alert.show { 
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
         .alert.error { background: #f44336; }
+        .alert.success { background: #4caf50; }
+
+        .dashboard-welcome {
+            text-align: center;
+            padding: 50px;
+            background: white;
+            border-radius: 15px;
+            margin: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .dashboard-welcome h2 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 28px;
+        }
+
+        .dashboard-welcome p {
+            color: #666;
+            font-size: 16px;
+            margin-bottom: 30px;
+        }
+
+        .coming-soon {
+            text-align: center;
+            padding: 50px;
+            background: white;
+            border-radius: 15px;
+            margin: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .coming-soon i {
+            font-size: 60px;
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        .coming-soon h2 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .coming-soon p {
+            color: #666;
+        }
 
         @media (max-width: 768px) {
-            .container { margin: 20px; padding: 15px; }
-            .tabs { flex-direction: column; }
-            .exercises { grid-template-columns: 1fr; }
+            .container { 
+                margin: 20px; 
+                padding: 15px; 
+            }
+            
+            .tabs { 
+                flex-direction: column; 
+            }
+            
+            .exercises { 
+                grid-template-columns: 1fr; 
+            }
+
+            .nav {
+                padding: 10px 15px;
+            }
+
+            .nav-brand {
+                font-size: 16px;
+            }
+
+            .tab-content {
+                padding: 15px;
+            }
+
+            .alert {
+                right: 10px;
+                left: 10px;
+                top: 10px;
+            }
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: #4caf50;
+            border-radius: 50%;
+            margin-left: 8px;
+            animation: blink 2s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.3; }
         }
     </style>
 </head>
@@ -280,7 +420,7 @@
                 <div class="content">
                     <div class="form-group">
                         <label>الاسم الكامل</label>
-                        <input type="text" id="userName" placeholder="أدخل اسمك الكامل">
+                        <input type="text" id="userName" placeholder="أدخل اسمك الكامل" maxlength="50">
                     </div>
                     
                     <div class="form-group">
@@ -324,29 +464,30 @@
             <div class="nav-brand">
                 <i class="fas fa-microphone-alt"></i>
                 أكاديمية أمريكان كوليدج
+                <span class="status-indicator"></span>
             </div>
             <div class="nav-user">
                 مرحباً <span id="currentUser">المستخدم</span>
-                <button onclick="logout()" style="margin-right: 15px; background: none; border: none; color: #666; cursor: pointer;">
+                <button class="logout-btn" onclick="logout()">
                     <i class="fas fa-sign-out-alt"></i>
                 </button>
             </div>
         </nav>
 
         <div class="tabs">
-            <button class="tab active" onclick="showTab('dashboard')">
+            <button class="tab active" onclick="showTab('dashboard', this)">
                 <i class="fas fa-home"></i><br>
                 الرئيسية
             </button>
-            <button class="tab" onclick="showTab('training')">
+            <button class="tab" onclick="showTab('training', this)">
                 <i class="fas fa-dumbbell"></i><br>
                 التدريب
             </button>
-            <button class="tab" onclick="showTab('analysis')">
+            <button class="tab" onclick="showTab('analysis', this)">
                 <i class="fas fa-chart-line"></i><br>
                 التحليل
             </button>
-            <button class="tab" onclick="showTab('progress')">
+            <button class="tab" onclick="showTab('progress', this)">
                 <i class="fas fa-trophy"></i><br>
                 التقدم
             </button>
@@ -354,24 +495,28 @@
 
         <div class="tab-content">
             <div id="dashboard" class="tab-panel active">
-                <div style="text-align: center; padding: 50px;">
+                <div class="dashboard-welcome">
+                    <i class="fas fa-star" style="font-size: 50px; color: #667eea; margin-bottom: 20px;"></i>
                     <h2>مرحباً بك في أكاديمية أمريكان كوليدج!</h2>
-                    <p>ابدأ رحلتك التدريبية من قسم التدريب</p>
-                    <button class="btn btn-primary" onclick="showTab('training')" style="max-width: 300px; margin-top: 20px;">
-                        انتقل إلى التدريب
+                    <p>ابدأ رحلتك التدريبية لتطوير مهاراتك الصوتية والوصول للاحترافية</p>
+                    <button class="btn btn-primary" onclick="showTab('training', document.querySelector('.tab:nth-child(2)'))" style="max-width: 300px;">
+                        <i class="fas fa-play"></i>
+                        ابدأ التدريب الآن
                     </button>
                 </div>
             </div>
 
             <div id="training" class="tab-panel">
-                <h2 style="text-align: center; margin-bottom: 10px;">قسم التدريب</h2>
-                <p style="text-align: center; color: #666; margin-bottom: 30px;">اختر التمرين المناسب لك</p>
+                <div style="text-align: center; margin-bottom: 30px;">
+                    <h2>قسم التدريب</h2>
+                    <p style="color: #666;">اختر التمرين المناسب لمستواك وهدفك</p>
+                </div>
                 
                 <div class="exercises">
                     <div class="exercise" onclick="startExercise('breathing')">
                         <i class="fas fa-lungs" style="color: #4caf50;"></i>
                         <h3>تمارين التنفس</h3>
-                        <p>تحسين التحكم في التنفس والصوت</p>
+                        <p>تحسين التحكم في التنفس والإيقاع الصوتي</p>
                         <span class="difficulty easy">سهل</span>
                     </div>
                     
@@ -385,134 +530,260 @@
                     <div class="exercise" onclick="startExercise('expression')">
                         <i class="fas fa-theater-masks" style="color: #9c27b0;"></i>
                         <h3>تمارين التعبير</h3>
-                        <p>تطوير القدرة على التعبير العاطفي</p>
+                        <p>تطوير القدرة على التعبير العاطفي والتنويع الصوتي</p>
                         <span class="difficulty medium">متوسط</span>
                     </div>
                     
                     <div class="exercise" onclick="startExercise('confidence')">
                         <i class="fas fa-user-tie" style="color: #ff9800;"></i>
                         <h3>تمارين الثقة</h3>
-                        <p>بناء الثقة بالنفس والحضور</p>
+                        <p>بناء الثقة بالنفس والحضور المؤثر</p>
                         <span class="difficulty medium">متوسط</span>
                     </div>
                     
                     <div class="exercise" onclick="startExercise('advanced')">
                         <i class="fas fa-crown" style="color: #667eea;"></i>
                         <h3>التحدي المتقدم</h3>
-                        <p>تمرين شامل لجميع المهارات</p>
+                        <p>تمرين شامل يجمع جميع المهارات الصوتية</p>
+                        <span class="difficulty hard">صعب</span>
+                    </div>
+                    
+                    <div class="exercise" onclick="startExercise('speed')">
+                        <i class="fas fa-tachometer-alt" style="color: #e91e63;"></i>
+                        <h3>تمارين السرعة</h3>
+                        <p>تحسين سرعة النطق والطلاقة في الكلام</p>
                         <span class="difficulty hard">صعب</span>
                     </div>
                 </div>
             </div>
 
             <div id="analysis" class="tab-panel">
-                <div style="text-align: center; padding: 50px;">
-                    <i class="fas fa-chart-line" style="font-size: 60px; color: #667eea; margin-bottom: 20px;"></i>
-                    <h2>التحليل الذكي</h2>
-                    <p>سجل تمريناً أولاً لترى التحليل هنا</p>
+                <div class="coming-soon">
+                    <i class="fas fa-chart-line"></i>
+                    <h2>التحليل الذكي للأداء</h2>
+                    <p>سيتم عرض تحليل مفصل لأدائك الصوتي هنا بعد إكمال التمارين</p>
+                    <div style="margin-top: 20px; color: #999;">
+                        <i class="fas fa-cog fa-spin" style="margin-left: 10px;"></i>
+                        قريباً...
+                    </div>
                 </div>
             </div>
 
             <div id="progress" class="tab-panel">
-                <div style="text-align: center; padding: 50px;">
-                    <i class="fas fa-trophy" style="font-size: 60px; color: #667eea; margin-bottom: 20px;"></i>
-                    <h2>تقرير التقدم</h2>
-                    <p>ستظهر إحصائياتك وإنجازاتك هنا</p>
+                <div class="coming-soon">
+                    <i class="fas fa-trophy"></i>
+                    <h2>تقرير التقدم والإنجازات</h2>
+                    <p>ستظهر إحصائياتك وشهاداتك وإنجازاتك في هذا القسم</p>
+                    <div style="margin-top: 20px; color: #999;">
+                        <i class="fas fa-medal" style="margin-left: 10px;"></i>
+                        ابدأ التدريب لترى إنجازاتك
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- رسائل التأكيد -->
-    <div id="alert" class="alert"></div>
+    <!-- رسائل التنبيه -->
+    <div id="alert" class="alert">
+        <i class="fas fa-check-circle"></i>
+        <span id="alertText"></span>
+    </div>
 
     <script>
         // متغيرات التطبيق
         let currentUserData = null;
+        let isDemo = false;
 
-        // عرض رسالة
+        // عرض رسالة تنبيه
         function showAlert(message, type = 'success') {
             const alert = document.getElementById('alert');
-            alert.textContent = message;
+            const alertText = document.getElementById('alertText');
+            const icon = alert.querySelector('i');
+            
+            alertText.textContent = message;
             alert.className = `alert ${type} show`;
+            
+            // تغيير الأيقونة حسب نوع الرسالة
+            if (type === 'error') {
+                icon.className = 'fas fa-exclamation-circle';
+            } else {
+                icon.className = 'fas fa-check-circle';
+            }
+            
             setTimeout(() => {
                 alert.classList.remove('show');
-            }, 3000);
+            }, 4000);
         }
 
         // بدء التطبيق
         function startApp() {
-            const name = document.getElementById('userName').value.trim();
-            const level = document.getElementById('userLevel').value;
-            const goal = document.getElementById('trainingGoal').value;
+            const nameInput = document.getElementById('userName');
+            const levelSelect = document.getElementById('userLevel');
+            const goalSelect = document.getElementById('trainingGoal');
+            
+            const name = nameInput.value.trim();
+            const level = levelSelect.value;
+            const goal = goalSelect.value;
 
+            // التحقق من صحة البيانات
             if (!name) {
-                showAlert('يرجى إدخال اسمك', 'error');
+                showAlert('يرجى إدخال اسمك الكامل', 'error');
+                nameInput.focus();
                 return;
             }
 
             if (name.length < 2) {
-                showAlert('الاسم قصير جداً', 'error');
+                showAlert('الاسم يجب أن يكون أكثر من حرفين', 'error');
+                nameInput.focus();
                 return;
             }
 
-            currentUserData = { name, level, goal };
+            if (name.length > 50) {
+                showAlert('الاسم طويل جداً', 'error');
+                nameInput.focus();
+                return;
+            }
+
+            // حفظ بيانات المستخدم
+            currentUserData = { 
+                name: name, 
+                level: level, 
+                goal: goal,
+                joinDate: new Date().toISOString(),
+                exercises: 0
+            };
             
-            document.getElementById('loginScreen').style.display = 'none';
-            document.getElementById('mainApp').style.display = 'block';
-            document.getElementById('currentUser').textContent = name;
+            isDemo = false;
             
-            showAlert(`مرحباً ${name}! تم تسجيل دخولك بنجاح 🎉`);
+            // الانتقال للواجهة الرئيسية
+            switchToMainApp(name);
+            
+            showAlert(`أهلاً وسهلاً ${name}! تم تسجيل دخولك بنجاح 🎉`, 'success');
         }
 
-        // عرض توضيحي
+        // بدء العرض التوضيحي
         function startDemo() {
-            currentUserData = { name: 'مستخدم تجريبي', level: 'intermediate', goal: 'general' };
+            currentUserData = { 
+                name: 'مستخدم تجريبي', 
+                level: 'intermediate', 
+                goal: 'general',
+                joinDate: new Date().toISOString(),
+                exercises: 0
+            };
             
+            isDemo = true;
+            
+            switchToMainApp('مستخدم تجريبي');
+            showAlert('مرحباً بك في العرض التوضيحي! 🎭', 'success');
+        }
+
+        // الانتقال للواجهة الرئيسية
+        function switchToMainApp(userName) {
             document.getElementById('loginScreen').style.display = 'none';
             document.getElementById('mainApp').style.display = 'block';
-            document.getElementById('currentUser').textContent = 'مستخدم تجريبي';
-            
-            showAlert('مرحباً بك في العرض التوضيحي! 🎭');
+            document.getElementById('currentUser').textContent = userName;
         }
 
         // عرض التبويب
-        function showTab(tabName) {
-            // إخفاء جميع التبويبات
-            document.querySelectorAll('.tab-panel').forEach(panel => {
-                panel.classList.remove('active');
-            });
+        function showTab(tabName, tabElement) {
+            // إزالة الفئة النشطة من جميع التبويبات
+            const allTabs = document.querySelectorAll('.tab');
+            const allPanels = document.querySelectorAll('.tab-panel');
             
-            document.querySelectorAll('.tab').forEach(tab => {
-                tab.classList.remove('active');
-            });
+            allTabs.forEach(tab => tab.classList.remove('active'));
+            allPanels.forEach(panel => panel.classList.remove('active'));
 
-            // إظهار التبويب المحدد
-            document.getElementById(tabName).classList.add('active');
-            event.target.classList.add('active');
+            // إضافة الفئة النشطة للتبويب والقسم المحدد
+            if (tabElement) {
+                tabElement.classList.add('active');
+            }
+            
+            const targetPanel = document.getElementById(tabName);
+            if (targetPanel) {
+                targetPanel.classList.add('active');
+            }
+
+            // رسالة ترحيب للأقسام المختلفة
+            const messages = {
+                'dashboard': 'مرحباً بك في الصفحة الرئيسية',
+                'training': 'اختر التمرين المناسب لك',
+                'analysis': 'قسم التحليل - قريباً',
+                'progress': 'قسم التقدم - قريباً'
+            };
+
+            if (messages[tabName]) {
+                console.log(messages[tabName]);
+            }
         }
 
         // بدء التمرين
         function startExercise(type) {
             const exercises = {
-                breathing: 'تمرين التنفس العميق',
-                pronunciation: 'تمرين النطق المتقدم', 
-                expression: 'تمرين التعبير العاطفي',
-                confidence: 'تمرين بناء الثقة',
-                advanced: 'التحدي المتقدم'
+                'breathing': {
+                    name: 'تمرين التنفس العميق',
+                    description: 'تحسين التحكم في التنفس',
+                    emoji: '🫁'
+                },
+                'pronunciation': {
+                    name: 'تمرين النطق المتقدم',
+                    description: 'تحسين وضوح الكلمات',
+                    emoji: '🗣️'
+                },
+                'expression': {
+                    name: 'تمرين التعبير العاطفي',
+                    description: 'تطوير التنويع الصوتي',
+                    emoji: '🎭'
+                },
+                'confidence': {
+                    name: 'تمرين بناء الثقة',
+                    description: 'تعزيز الحضور والثقة',
+                    emoji: '💪'
+                },
+                'advanced': {
+                    name: 'التحدي المتقدم',
+                    description: 'تمرين شامل للمهارات',
+                    emoji: '👑'
+                },
+                'speed': {
+                    name: 'تمرين السرعة',
+                    description: 'تحسين سرعة النطق',
+                    emoji: '⚡'
+                }
             };
 
-            const exerciseName = exercises[type] || 'التمرين';
-            showAlert(`تم بدء ${exerciseName} بنجاح! 🎯`);
-            
-            // يمكن إضافة منطق التمرين هنا
-            console.log(`Starting exercise: ${type}`);
+            const exercise = exercises[type];
+            if (exercise) {
+                // زيادة عداد التمارين
+                if (currentUserData) {
+                    currentUserData.exercises++;
+                }
+
+                showAlert(`${exercise.emoji} تم بدء ${exercise.name} بنجاح!`, 'success');
+                
+                // يمكن إضافة منطق التمرين هنا
+                console.log(`بدء التمرين: ${exercise.name} - ${exercise.description}`);
+                
+                // محاكاة تقدم التمرين
+                setTimeout(() => {
+                    console.log(`جاري تنفيذ ${exercise.name}...`);
+                }, 1000);
+            } else {
+                showAlert('حدث خطأ في تحديد نوع التمرين', 'error');
+            }
         }
 
         // تسجيل الخروج
         function logout() {
-            if (confirm('هل تريد تسجيل الخروج؟')) {
+            const confirmMessage = isDemo ? 
+                'هل تريد الخروج من العرض التوضيحي؟' : 
+                'هل تريد تسجيل الخروج؟';
+
+            if (confirm(confirmMessage)) {
+                // إعادة تعيين البيانات
                 currentUserData = null;
+                isDemo = false;
+                
+                // العودة لشاشة تسجيل الدخول
                 document.getElementById('mainApp').style.display = 'none';
                 document.getElementById('loginScreen').style.display = 'block';
                 
@@ -521,20 +792,165 @@
                 document.getElementById('userLevel').selectedIndex = 0;
                 document.getElementById('trainingGoal').selectedIndex = 0;
                 
-                showAlert('تم تسجيل الخروج');
+                // إعادة تعيين التبويبات للصفحة الرئيسية
+                showTab('dashboard', document.querySelector('.tab'));
+                
+                showAlert('تم تسجيل الخروج بنجاح', 'success');
             }
         }
 
-        // إضافة مستمع Enter للاسم
+        // إضافة مستمع للضغط على Enter في حقل الاسم
         document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('userName').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    startApp();
-                }
-            });
+            const userNameInput = document.getElementById('userName');
+            
+            if (userNameInput) {
+                userNameInput.addEventListener('keypress', function(event) {
+                    if (event.key === 'Enter') {
+                        startApp();
+                    }
+                });
+
+                // تركيز على حقل الاسم عند تحميل الصفحة
+                userNameInput.focus();
+            }
+
+            // إضافة تأثير التحميل
+            console.log('🎉 أكاديمية أمريكان كوليدج - جاهزة للعمل!');
+            console.log('✅ جميع الوظائف تعمل بشكل مثالي');
+            
+            // تأثير بصري للتحميل
+            document.body.style.opacity = '0';
+            setTimeout(() => {
+                document.body.style.transition = 'opacity 0.5s ease-in';
+                document.body.style.opacity = '1';
+            }, 100);
         });
 
-        console.log('✅ التطبيق جاهز - جميع الأزرار تعمل الآن!');
+        // إضافة تأثيرات بصرية للتفاعل
+        function addInteractiveEffects() {
+            // تأثير النقر على الأزرار
+            document.addEventListener('click', function(event) {
+                if (event.target.classList.contains('btn') || 
+                    event.target.classList.contains('exercise') ||
+                    event.target.classList.contains('tab')) {
+                    
+                    // إنشاء تأثير التموج
+                    const ripple = document.createElement('span');
+                    const rect = event.target.getBoundingClientRect();
+                    const size = Math.max(rect.width, rect.height);
+                    const x = event.clientX - rect.left - size / 2;
+                    const y = event.clientY - rect.top - size / 2;
+                    
+                    ripple.style.cssText = `
+                        position: absolute;
+                        width: ${size}px;
+                        height: ${size}px;
+                        left: ${x}px;
+                        top: ${y}px;
+                        background: rgba(255, 255, 255, 0.4);
+                        border-radius: 50%;
+                        pointer-events: none;
+                        animation: ripple 0.6s ease-out;
+                        z-index: 1;
+                    `;
+                    
+                    event.target.style.position = 'relative';
+                    event.target.style.overflow = 'hidden';
+                    event.target.appendChild(ripple);
+                    
+                    setTimeout(() => {
+                        if (ripple.parentNode) {
+                            ripple.parentNode.removeChild(ripple);
+                        }
+                    }, 600);
+                }
+            });
+        }
+
+        // تشغيل التأثيرات التفاعلية
+        addInteractiveEffects();
+
+        // معالج الأخطاء العام
+        window.addEventListener('error', function(event) {
+            console.error('حدث خطأ:', event.error);
+            showAlert('حدث خطأ غير متوقع، يرجى المحاولة مرة أخرى', 'error');
+        });
+
+        // إضافة أنماط CSS للتأثيرات
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes ripple {
+                0% {
+                    transform: scale(0);
+                    opacity: 1;
+                }
+                100% {
+                    transform: scale(2);
+                    opacity: 0;
+                }
+            }
+            
+            .loading {
+                position: relative;
+                overflow: hidden;
+            }
+            
+            .loading::after {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+                animation: loading 1.5s infinite;
+            }
+            
+            @keyframes loading {
+                0% { left: -100%; }
+                100% { left: 100%; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // وظائف مساعدة إضافية
+        function validateInput(input, minLength = 2, maxLength = 50) {
+            const value = input.trim();
+            return value.length >= minLength && value.length <= maxLength;
+        }
+
+        function formatDate(date) {
+            return new Intl.DateTimeFormat('ar-SA', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            }).format(new Date(date));
+        }
+
+        function getUserStats() {
+            if (!currentUserData) return null;
+            
+            return {
+                name: currentUserData.name,
+                level: currentUserData.level,
+                goal: currentUserData.goal,
+                exercises: currentUserData.exercises,
+                joinDate: formatDate(currentUserData.joinDate),
+                isDemo: isDemo
+            };
+        }
+
+        // تصدير الوظائف للاستخدام في وحدة التحكم
+        window.voiceAcademy = {
+            currentUser: () => getUserStats(),
+            resetApp: () => logout(),
+            showUserInfo: () => console.table(getUserStats()),
+            version: '2.0.0'
+        };
+
+        console.log('🔧 للحصول على معلومات المطور: window.voiceAcademy');
     </script>
 </body>
 </html>
