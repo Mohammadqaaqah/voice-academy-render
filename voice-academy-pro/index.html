@@ -51,7 +51,7 @@
                         <i class="fas fa-microphone-alt"></i>
                     </div>
                     <h1>أكاديمية الإعلام الاحترافية</h1>
-                    <p>منصة تدريب متقدمة مدعومة بالذكاء الاصطناعي</p>
+                    <p>منصة تدريب متطورة مدعومة بالذكاء الاصطناعي</p>
                 </div>
                 
                 <div class="login-form">
@@ -266,9 +266,9 @@
                         </h3>
                         <div class="progress-ring">
                             <svg class="progress-circle" width="120" height="120">
-                                <circle cx="60" cy="60" r="50" stroke="#e0e0e0" stroke-width="8" fill="none"/>
-                                <circle cx="60" cy="60" r="50" stroke="#4CAF50" stroke-width="8" fill="none" 
-                                        stroke-dasharray="314" stroke-dashoffset="314" id="progressCircle"/>
+                                <circle cx="60" cy="60" r="45" stroke="#e0e0e0" stroke-width="8" fill="none"/>
+                                <circle cx="60" cy="60" r="45" stroke="#4CAF50" stroke-width="8" fill="none" 
+                                        stroke-dasharray="283" stroke-dashoffset="283" class="progress-circle"/>
                             </svg>
                             <div class="progress-text">
                                 <span id="dailyProgressPercent">0%</span>
@@ -293,15 +293,79 @@
                 </div>
             </div>
 
-            <!-- باقي التبويبات - سنضيفها لاحقاً -->
+            <!-- التدريب -->
             <div id="training" class="tab-panel">
-                <div class="coming-soon">
-                    <i class="fas fa-dumbbell fa-3x"></i>
-                    <h2>قسم التدريب</h2>
-                    <p>جاري التطوير...</p>
+                <div class="training-container">
+                    <div class="training-header">
+                        <h2><i class="fas fa-dumbbell"></i> قسم التدريب</h2>
+                        <p>اختر نوع التمرين الذي تريد التدرب عليه</p>
+                    </div>
+                    
+                    <div class="exercises-grid">
+                        <div class="exercise-card" onclick="startExercise('breathing')">
+                            <div class="exercise-icon breathing">
+                                <i class="fas fa-lungs"></i>
+                            </div>
+                            <h3>تمارين التنفس</h3>
+                            <p>تحسين التحكم في التنفس والصوت</p>
+                            <div class="exercise-meta">
+                                <span class="difficulty easy">سهل</span>
+                                <span class="duration">10 دقائق</span>
+                            </div>
+                        </div>
+                        
+                        <div class="exercise-card" onclick="startExercise('pronunciation')">
+                            <div class="exercise-icon pronunciation">
+                                <i class="fas fa-spell-check"></i>
+                            </div>
+                            <h3>تمارين النطق</h3>
+                            <p>تحسين وضوح النطق ومخارج الحروف</p>
+                            <div class="exercise-meta">
+                                <span class="difficulty medium">متوسط</span>
+                                <span class="duration">15 دقيقة</span>
+                            </div>
+                        </div>
+                        
+                        <div class="exercise-card" onclick="startExercise('expression')">
+                            <div class="exercise-icon expression">
+                                <i class="fas fa-theater-masks"></i>
+                            </div>
+                            <h3>تمارين التعبير</h3>
+                            <p>تطوير القدرة على التعبير العاطفي</p>
+                            <div class="exercise-meta">
+                                <span class="difficulty medium">متوسط</span>
+                                <span class="duration">20 دقيقة</span>
+                            </div>
+                        </div>
+                        
+                        <div class="exercise-card" onclick="startExercise('confidence')">
+                            <div class="exercise-icon confidence">
+                                <i class="fas fa-user-tie"></i>
+                            </div>
+                            <h3>تمارين الثقة</h3>
+                            <p>بناء الثقة بالنفس والحضور</p>
+                            <div class="exercise-meta">
+                                <span class="difficulty medium">متوسط</span>
+                                <span class="duration">15 دقيقة</span>
+                            </div>
+                        </div>
+                        
+                        <div class="exercise-card" onclick="startExercise('advanced')">
+                            <div class="exercise-icon advanced">
+                                <i class="fas fa-trophy"></i>
+                            </div>
+                            <h3>التحدي المتقدم</h3>
+                            <p>تمرين شامل لجميع المهارات</p>
+                            <div class="exercise-meta">
+                                <span class="difficulty hard">صعب</span>
+                                <span class="duration">30 دقيقة</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
+            <!-- التحليل الذكي -->
             <div id="analysis" class="tab-panel">
                 <div class="coming-soon">
                     <i class="fas fa-chart-line fa-3x"></i>
@@ -310,6 +374,7 @@
                 </div>
             </div>
 
+            <!-- الاستوديو -->
             <div id="studio" class="tab-panel">
                 <div class="coming-soon">
                     <i class="fas fa-microphone fa-3x"></i>
@@ -318,6 +383,7 @@
                 </div>
             </div>
 
+            <!-- التقدم -->
             <div id="progress" class="tab-panel">
                 <div class="coming-soon">
                     <i class="fas fa-chart-bar fa-3x"></i>
@@ -357,14 +423,58 @@
         </div>
     </div>
 
-    <!-- ملفات JavaScript -->
-    <script src="app.js"></script>
-    <script src="ai-analysis.js"></script>
+    <!-- ملفات JavaScript بالترتيب الصحيح -->
     <script src="audio-processing.js"></script>
+    <script src="ai-analysis.js"></script>
+    <script src="training.js"></script>
+    <script src="app.js"></script>
     
     <!-- تهيئة التطبيق -->
     <script>
         console.log('🎓 أكاديمية الإعلام الاحترافية - جاري التحميل...');
+        
+        // وظيفة بدء التمرين
+        function startExercise(exerciseType) {
+            console.log('🎯 طلب بدء تمرين:', exerciseType);
+            
+            if (window.trainingSystem) {
+                window.trainingSystem.startExercise(exerciseType);
+            } else if (window.voiceAcademy) {
+                window.voiceAcademy.startRecommendedExercise(exerciseType);
+            } else {
+                console.error('❌ نظام التدريب غير متوفر');
+                alert('نظام التدريب قيد التحميل، يرجى المحاولة خلال لحظات');
+            }
+        }
+        
+        // وظائف أساسية
+        function showNotifications() {
+            console.log('📢 عرض الإشعارات');
+            alert('الإشعارات: لديك 3 إشعارات جديدة!');
+        }
+        
+        function showProfile() {
+            console.log('👤 عرض الملف الشخصي');
+            alert('الملف الشخصي: قريباً!');
+        }
+        
+        function logout() {
+            if (confirm('هل تريد تسجيل الخروج؟')) {
+                location.reload();
+            }
+        }
+        
+        function togglePlayPause() {
+            console.log('⏯️ تشغيل/إيقاف');
+        }
+        
+        function stopAudio() {
+            console.log('⏹️ إيقاف الصوت');
+            const player = document.getElementById('floatingPlayer');
+            if (player) {
+                player.classList.add('hidden');
+            }
+        }
     </script>
 </body>
 </html>
